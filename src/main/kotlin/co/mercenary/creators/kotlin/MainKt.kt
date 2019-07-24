@@ -134,5 +134,3 @@ inline fun <reified T : Any> jsonRead(data: ByteArray) = JSONStatic.jsonRead(dat
 inline fun <reified T : Any> jsonRead(data: Reader, done: Boolean = true) = JSONStatic.jsonRead(data, object : TypeReference<T>() {}, done)
 
 inline fun <reified T : Any> jsonRead(data: InputStream, done: Boolean = true) = JSONStatic.jsonRead(data, object : TypeReference<T>() {}, done)
-
-fun JSONAware.toInputStream(): ByteArrayInputStream = ByteArrayInputStream(toByteArray())
