@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.module
+package co.mercenary.creators.kotlin.json.util.typicode
 
-import com.fasterxml.jackson.core.*
-import com.fasterxml.jackson.core.util.VersionUtil
+import co.mercenary.creators.kotlin.json.*
 
-class PackageVersion : Versioned {
-    private val version = VersionUtil.parseVersion("2.0.0-SNAPSHOT", "co.mercenary-creators", "mercenary-creators-kotlin-json")
-    override fun version(): Version = version
+data class TodoData(val userId: Int, val id: Int, val title: String, val completed: Boolean) : JSONObjectAware {
+    override fun toString() = toJSONString()
+    companion object {
+        const val LIST_SIZE = 200
+        const val BASE_PATH = "http://jsonplaceholder.typicode.com/todos"
+    }
 }

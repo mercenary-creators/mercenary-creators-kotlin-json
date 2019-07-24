@@ -19,4 +19,5 @@ package co.mercenary.creators.kotlin.json
 interface JSONAware {
     fun toByteArray() = JSONStatic.toByteArray(this)
     fun toJSONString(pretty: Boolean = true) = JSONStatic.toJSONString(this, pretty)
+    fun toInputStream() = toByteArray().inputStream()
 }

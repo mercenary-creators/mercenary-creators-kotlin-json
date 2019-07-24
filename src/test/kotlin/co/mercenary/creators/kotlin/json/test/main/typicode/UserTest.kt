@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.module
+package co.mercenary.creators.kotlin.json.test.main.typicode
 
-import com.fasterxml.jackson.core.*
-import com.fasterxml.jackson.core.util.VersionUtil
+import co.mercenary.creators.kotlin.*
+import co.mercenary.creators.kotlin.json.util.typicode.UserData
+import co.mercenary.creators.kotlin.util.toURL
+import org.junit.jupiter.api.Test
 
-class PackageVersion : Versioned {
-    private val version = VersionUtil.parseVersion("2.0.0-SNAPSHOT", "co.mercenary-creators", "mercenary-creators-kotlin-json")
-    override fun version(): Version = version
+class UserTest : KotlinTest() {
+    @Test
+    fun text() {
+        val list = toJSONArray(UserData.BASE_PATH.toURL())
+        info { list }
+        list.size.shouldBe(UserData.LIST_SIZE) {
+            list.size
+        }
+    }
 }
