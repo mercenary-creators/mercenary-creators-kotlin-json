@@ -71,63 +71,63 @@ open class JSONMapper : ObjectMapper {
 
     fun <T : Any> toDataType(value: Any, type: TypeReference<T>): T = convertValue(value, type)
 
-    fun <T> toDeepCopy(value: T): T = readerFor((value as Any).javaClass).readValue<T>(writeValueAsBytes(value))
+    fun <T> toDeepCopy(value: T): T = readerFor((value as Any).javaClass).readValue(writeValueAsBytes(value))
 
-    fun <T : Any> toDeepCopy(value: T, type: Class<T>): T = readerFor(type).readValue<T>(writeValueAsBytes(value))
+    fun <T : Any> toDeepCopy(value: T, type: Class<T>): T = readerFor(type).readValue(writeValueAsBytes(value))
 
-    fun <T : Any> toDeepCopy(value: T, type: KClass<T>): T = readerFor(type.java).readValue<T>(writeValueAsBytes(value))
+    fun <T : Any> toDeepCopy(value: T, type: KClass<T>): T = readerFor(type.java).readValue(writeValueAsBytes(value))
 
-    fun <T : Any> toDeepCopy(value: T, type: TypeReference<T>): T = readerFor(type).readValue<T>(writeValueAsBytes(value))
+    fun <T : Any> toDeepCopy(value: T, type: TypeReference<T>): T = readerFor(type).readValue(writeValueAsBytes(value))
 
-    fun <T : Any> jsonRead(value: URL, type: TypeReference<T>): T = readerFor(type).readValue<T>(value)
+    fun <T : Any> jsonRead(value: URL, type: TypeReference<T>): T = readerFor(type).readValue(value)
 
-    fun <T : Any> jsonRead(value: String, type: TypeReference<T>): T = readerFor(type).readValue<T>(value)
+    fun <T : Any> jsonRead(value: String, type: TypeReference<T>): T = readerFor(type).readValue(value)
 
-    fun <T : Any> jsonRead(value: ByteArray, type: TypeReference<T>): T = readerFor(type).readValue<T>(value)
+    fun <T : Any> jsonRead(value: ByteArray, type: TypeReference<T>): T = readerFor(type).readValue(value)
 
-    fun <T : Any> jsonRead(value: File, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue<T>(it) }
+    fun <T : Any> jsonRead(value: File, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
-    fun <T : Any> jsonRead(value: Path, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue<T>(it) }
+    fun <T : Any> jsonRead(value: Path, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
-    fun <T : Any> jsonRead(value: InputStreamSupplier, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue<T>(it) }
+    fun <T : Any> jsonRead(value: InputStreamSupplier, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
-    fun <T : Any> jsonRead(value: ReadableByteChannel, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue<T>(it) }
+    fun <T : Any> jsonRead(value: ReadableByteChannel, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
     fun <T : Any> jsonRead(value: Reader, type: TypeReference<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
     fun <T : Any> jsonRead(value: InputStream, type: TypeReference<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
-    fun <T : Any> jsonRead(value: URL, type: Class<T>): T = readerFor(type).readValue<T>(value)
+    fun <T : Any> jsonRead(value: URL, type: Class<T>): T = readerFor(type).readValue(value)
 
-    fun <T : Any> jsonRead(value: String, type: Class<T>): T = readerFor(type).readValue<T>(value)
+    fun <T : Any> jsonRead(value: String, type: Class<T>): T = readerFor(type).readValue(value)
 
-    fun <T : Any> jsonRead(value: ByteArray, type: Class<T>): T = readerFor(type).readValue<T>(value)
+    fun <T : Any> jsonRead(value: ByteArray, type: Class<T>): T = readerFor(type).readValue(value)
 
-    fun <T : Any> jsonRead(value: File, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue<T>(it) }
+    fun <T : Any> jsonRead(value: File, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
-    fun <T : Any> jsonRead(value: Path, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue<T>(it) }
+    fun <T : Any> jsonRead(value: Path, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
-    fun <T : Any> jsonRead(value: InputStreamSupplier, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue<T>(it) }
+    fun <T : Any> jsonRead(value: InputStreamSupplier, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
-    fun <T : Any> jsonRead(value: ReadableByteChannel, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue<T>(it) }
+    fun <T : Any> jsonRead(value: ReadableByteChannel, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
     fun <T : Any> jsonRead(value: Reader, type: Class<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
     fun <T : Any> jsonRead(value: InputStream, type: Class<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
-    fun <T : Any> jsonRead(value: URL, type: KClass<T>): T = readerFor(type.java).readValue<T>(value)
+    fun <T : Any> jsonRead(value: URL, type: KClass<T>): T = readerFor(type.java).readValue(value)
 
-    fun <T : Any> jsonRead(value: String, type: KClass<T>): T = readerFor(type.java).readValue<T>(value)
+    fun <T : Any> jsonRead(value: String, type: KClass<T>): T = readerFor(type.java).readValue(value)
 
-    fun <T : Any> jsonRead(value: ByteArray, type: KClass<T>): T = readerFor(type.java).readValue<T>(value)
+    fun <T : Any> jsonRead(value: ByteArray, type: KClass<T>): T = readerFor(type.java).readValue(value)
 
-    fun <T : Any> jsonRead(value: File, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue<T>(it) }
+    fun <T : Any> jsonRead(value: File, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue(it) }
 
-    fun <T : Any> jsonRead(value: Path, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue<T>(it) }
+    fun <T : Any> jsonRead(value: Path, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue(it) }
 
-    fun <T : Any> jsonRead(value: InputStreamSupplier, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue<T>(it) }
+    fun <T : Any> jsonRead(value: InputStreamSupplier, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue(it) }
 
-    fun <T : Any> jsonRead(value: ReadableByteChannel, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue<T>(it) }
+    fun <T : Any> jsonRead(value: ReadableByteChannel, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue(it) }
 
     fun <T : Any> jsonRead(value: Reader, type: KClass<T>, done: Boolean = true): T = if (done) value.use { readerFor(type.java).readValue<T>(it) } else readerFor(type.java).readValue<T>(value)
 

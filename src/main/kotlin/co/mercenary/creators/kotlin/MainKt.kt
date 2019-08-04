@@ -28,10 +28,6 @@ import java.io.*
 import java.net.URL
 import java.nio.file.Path
 
-typealias Charset = java.nio.charset.Charset
-
-typealias TimeUnit = java.util.concurrent.TimeUnit
-
 typealias JSONArray = JSONArray
 
 typealias JSONObject = JSONObject
