@@ -21,7 +21,9 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.function.Executable
 import java.util.*
 
-abstract class AbstractKotlinTest : AbstractLogging() {
+abstract class AbstractKotlinTest(val author: String = CREATORS_AUTHOR_INFO) : AbstractLogging() {
+
+    val loader = DefaultContentResourceLoader()
 
     private val conf: Properties by lazy {
         getConfigPropertiesBuilder().invoke()

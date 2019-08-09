@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test
 
 class TodoTest : KotlinTest() {
     @Test
-    fun text() {
+    fun test() {
         val list = toJSONArray(TodoData.BASE_PATH.toURL())
         info { list }
         list.size.shouldBe(TodoData.LIST_SIZE) {

@@ -17,15 +17,15 @@
 package co.mercenary.creators.kotlin.json.test.main
 
 import co.mercenary.creators.kotlin.*
-import co.mercenary.creators.kotlin.util.CREATORS_AUTHOR_INFO
 import org.junit.jupiter.api.Test
 
 class MainTest : KotlinTest() {
     @Test
-    fun text() {
-        val data = json("name" to CREATORS_AUTHOR_INFO, "year" to 1963)
+    fun test() {
+        val data = json("author" to author, "year" to 1963, "meta" to StringMetaData("dean" to "jones", "a" to "b"))
+        info { data.toJSONString(false) }
         info { data }
-        data.size.shouldBe(2) {
+        data.size.shouldBe(3) {
             data.size
         }
     }

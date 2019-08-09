@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test
 
 class AlbumTest : KotlinTest() {
     @Test
-    fun text() {
+    fun test() {
         val list = toJSONArray(AlbumData.BASE_PATH.toURL())
         info { list }
         list.size.shouldBe(AlbumData.LIST_SIZE) {

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-@file:kotlin.jvm.JvmName("TestKt")
+package co.mercenary.creators.kotlin.json.test.main.path
 
-package co.mercenary.creators.kotlin
+import co.mercenary.creators.kotlin.json.JSONAware
+import com.fasterxml.jackson.annotation.*
 
-typealias Executable = org.junit.jupiter.api.function.Executable
-
-typealias KotlinTest = co.mercenary.creators.kotlin.json.test.util.AbstractKotlinTest
-
-typealias StringMetaData = co.mercenary.creators.kotlin.util.meta.StringMetaData
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class BookData(val category: String, val author: String, val title: String, val isbn: String?, @JsonProperty("display-price") val price: Double) : JSONAware {
+    override fun toString() = toJSONString()
+}
