@@ -18,7 +18,6 @@ package co.mercenary.creators.kotlin.json.test.main.typicode
 
 import co.mercenary.creators.kotlin.*
 import co.mercenary.creators.kotlin.json.util.typicode.TodoData
-import co.mercenary.creators.kotlin.util.toURL
 import org.junit.jupiter.api.Test
 
 class TodoTest : KotlinTest() {

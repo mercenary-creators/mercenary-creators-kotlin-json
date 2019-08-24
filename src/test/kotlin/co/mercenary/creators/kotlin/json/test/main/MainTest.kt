@@ -22,10 +22,9 @@ import org.junit.jupiter.api.Test
 class MainTest : KotlinTest() {
     @Test
     fun test() {
-        val data = json("author" to author, "year" to 1963, "meta" to StringMetaData("dean" to "jones", "a" to "b"))
-        info { data.toJSONString(false) }
+        val data = json("author" to author, "year" to 1963)
         info { data }
-        data.size.shouldBe(3) {
+        data.size.shouldBe(2) {
             data.size
         }
     }

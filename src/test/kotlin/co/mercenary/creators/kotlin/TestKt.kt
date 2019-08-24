@@ -21,5 +21,3 @@ package co.mercenary.creators.kotlin
 typealias Executable = org.junit.jupiter.api.function.Executable
 
 typealias KotlinTest = co.mercenary.creators.kotlin.json.test.util.AbstractKotlinTest
-
-typealias StringMetaData = co.mercenary.creators.kotlin.util.meta.StringMetaData

@@ -18,14 +18,13 @@ package co.mercenary.creators.kotlin.json.test.main.typicode
 
 import co.mercenary.creators.kotlin.*
 import co.mercenary.creators.kotlin.json.util.typicode.UserData
-import co.mercenary.creators.kotlin.util.toURL
 import org.junit.jupiter.api.Test
 
 class UserTest : KotlinTest() {
     @Test
     fun test() {
-        val list = toJSONArray(UserData.BASE_PATH.toURL())
-        info { list }
+        val list = jsonRead<List<UserData>>(UserData.BASE_PATH.toURL())
+        info { toJSONString(list) }
         list.size.shouldBe(UserData.LIST_SIZE) {
             list.size
         }
