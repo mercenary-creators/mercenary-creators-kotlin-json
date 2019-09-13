@@ -17,12 +17,13 @@
 package co.mercenary.creators.kotlin.json.test.main.path
 
 import co.mercenary.creators.kotlin.*
+import co.mercenary.creators.kotlin.util.*
 import org.junit.jupiter.api.Test
 
 class JSONPathTest : KotlinTest() {
     @Test
     fun test() {
-        val path = JSONPath.path(loader["data.json"])
+        val path = JSONPath.path(RESOURCE_LOADER["data.json"])
         val data = path.eval<JSONObject>("$")
         info { data }
         data.size.shouldBe(10) {

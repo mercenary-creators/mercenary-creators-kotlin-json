@@ -22,9 +22,7 @@ import org.junit.jupiter.api.function.Executable
 import java.net.URL
 import java.util.*
 
-abstract class AbstractKotlinTest(val author: String = CREATORS_AUTHOR_INFO) : AbstractLogging() {
-
-    val loader = DefaultContentResourceLoader()
+abstract class AbstractKotlinTest(val author: String = CREATORS_AUTHOR_INFO) : Logging() {
 
     private val conf: Properties by lazy {
         getConfigPropertiesBuilder().invoke()
@@ -120,6 +118,4 @@ abstract class AbstractKotlinTest(val author: String = CREATORS_AUTHOR_INFO) : A
     fun <T : Any> (() -> T?).shouldNotBe(value: () -> Any?, block: () -> Any?) = assertNotEquals(value.invoke(), this.invoke(), block)
 
     fun ByteArray.shouldNotBe(value: ByteArray, block: () -> Any?) = assertNotEquals(value, this, block)
-
-    fun <T> timed(block: () -> T): T = timed({ info { it } }, block)
 }
