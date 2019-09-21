@@ -17,8 +17,9 @@
 package co.mercenary.creators.kotlin.json
 
 import co.mercenary.creators.kotlin.json.module.MercenaryKotlinModule
+import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
-import co.mercenary.creators.kotlin.util.toInputStream
+import co.mercenary.creators.kotlin.util.time.TimeAndDate
 import com.fasterxml.jackson.core.JsonGenerator.Feature.*
 import com.fasterxml.jackson.core.JsonParser.Feature.*
 import com.fasterxml.jackson.core.type.TypeReference
@@ -35,8 +36,6 @@ import java.io.*
 import java.net.URL
 import java.nio.channels.ReadableByteChannel
 import java.nio.file.Path
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.reflect.KClass
 
 open class JSONMapper : ObjectMapper {
@@ -55,7 +54,15 @@ open class JSONMapper : ObjectMapper {
 
     override fun canSerialize(type: Class<*>?) = if (null == type) false else super.canSerialize(type)
 
-    fun pretty(pretty: Boolean): ObjectMapper = if (pretty) setDefaultPrettyPrinter(TO_PRETTY_PRINTS).enable(INDENT_OUTPUT) else disable(INDENT_OUTPUT)
+    private fun pretty(pretty: Boolean): ObjectMapper = if (pretty) setDefaultPrettyPrinter(TO_PRETTY_PRINTS).enable(INDENT_OUTPUT) else disable(INDENT_OUTPUT)
+
+    fun isPretty(): Boolean = isEnabled(INDENT_OUTPUT)
+
+    fun setPretty(pretty: Boolean) {
+        if (pretty != isPretty()) {
+            pretty(pretty)
+        }
+    }
 
     fun canSerializeClass(type: Class<*>?) = canSerialize(type)
 
@@ -135,10 +142,10 @@ open class JSONMapper : ObjectMapper {
 
     companion object {
         private const val serialVersionUID = 2L
-        private val DEFAULT_TIMEZONE = TimeZone.getTimeZone("UTC")
-        private val TO_INDENT_PRINTS = DefaultIndenter().withIndent(" ".repeat(4))
-        private val JSON_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS z")
+        private val DEFAULT_TIMEZONE = TimeAndDate.getDefaultTimeZone()
+        private val JSON_DATE_FORMAT = TimeAndDate.getDefaultDateFormat()
+        private val TO_INDENT_PRINTS = DefaultIndenter().withIndent(SPACE_STRING.repeat(4))
         private val TO_PRETTY_PRINTS = DefaultPrettyPrinter().withArrayIndenter(TO_INDENT_PRINTS).withObjectIndenter(TO_INDENT_PRINTS)
-        private val EXTENDED_MODULES = listOf(Jdk8Module(), ParameterNamesModule(), JavaTimeModule(), KotlinModule(), MercenaryKotlinModule(), JodaModule())
+        private val EXTENDED_MODULES = listOf(Jdk8Module(), ParameterNamesModule(), JavaTimeModule(), MercenaryKotlinModule(), KotlinModule(), JodaModule())
     }
 }

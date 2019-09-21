@@ -19,7 +19,6 @@ package co.mercenary.creators.kotlin.json.test.util
 import co.mercenary.creators.kotlin.util.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.function.Executable
-import java.net.URL
 import java.util.*
 
 abstract class AbstractKotlinTest(val author: String = CREATORS_AUTHOR_INFO) : Logging() {
@@ -27,8 +26,6 @@ abstract class AbstractKotlinTest(val author: String = CREATORS_AUTHOR_INFO) : L
     private val conf: Properties by lazy {
         getConfigPropertiesBuilder().invoke()
     }
-
-    fun String.toURL() = URL(this)
 
     protected open fun getConfigPropertiesBuilder(): () -> Properties = { Properties() }
 

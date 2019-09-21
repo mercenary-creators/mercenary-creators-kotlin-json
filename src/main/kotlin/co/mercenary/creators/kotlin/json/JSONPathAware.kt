@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.util.typicode
+package co.mercenary.creators.kotlin.json
 
-import co.mercenary.creators.kotlin.json.*
+import co.mercenary.creators.kotlin.json.path.*
 
-data class UserData(val id: Int, val name: String, val username: String, val email: String, val address: AddressData, val phone: String, val website: String, val company: CompanyData) : JSONObjectAware {
-    override fun toString() = toJSONString()
-    companion object {
-        const val LIST_SIZE = 10
-        const val BASE_PATH = "http://jsonplaceholder.typicode.com/users"
-    }
+interface JSONPathAware {
+    fun path(): EvaluationContext = JSONPath.path(this)
 }

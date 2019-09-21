@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.test.main.typicode
+package co.mercenary.creators.kotlin.json
 
-import co.mercenary.creators.kotlin.*
-import org.junit.jupiter.api.Test
+import co.mercenary.creators.kotlin.util.type.Copyable
 
-class UserTest : KotlinTest() {
-    @Test
-    fun test() {
-        val list = jsonRead<List<TypicodeUserData>>(TypicodeUserData.link())
-        info { toJSONString(list) }
-        list.size.shouldBe(TypicodeUserData.LIST_SIZE) {
-            list.size
-        }
-    }
+interface JSONObjectFeatureAware<T> : JSONObjectAware, Copyable<T> {
+    fun json(vararg args: Pair<String, Any?>) = JSONObject(*args)
 }

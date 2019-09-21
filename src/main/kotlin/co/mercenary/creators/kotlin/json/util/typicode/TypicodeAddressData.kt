@@ -18,10 +18,6 @@ package co.mercenary.creators.kotlin.json.util.typicode
 
 import co.mercenary.creators.kotlin.json.*
 
-data class AlbumData(val userId: Int, val id: Int, val title: String) : JSONObjectAware {
+data class TypicodeAddressData(val street: String, val suite: String, val city: String, val zipcode: String, val geo: TypicodeGeoData) : JSONObjectAware {
     override fun toString() = toJSONString()
-    companion object {
-        const val LIST_SIZE = 100
-        const val BASE_PATH = "http://jsonplaceholder.typicode.com/albums"
-    }
 }

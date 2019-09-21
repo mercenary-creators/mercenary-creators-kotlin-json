@@ -16,8 +16,15 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-import co.mercenary.creators.kotlin.json.*
+import co.mercenary.creators.kotlin.json.JSONObjectAware
+import java.net.URL
 
-data class GeoData(val lat: String, val lng: String) : JSONObjectAware {
+data class TypicodePostData(val userId: Int, val id: Int, val title: String, val body: String) : JSONObjectAware {
     override fun toString() = toJSONString()
+
+    companion object {
+        const val LIST_SIZE = 100
+        const val BASE_PATH = "http://jsonplaceholder.typicode.com/posts"
+        fun link() = URL(BASE_PATH)
+    }
 }

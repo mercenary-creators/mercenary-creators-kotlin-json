@@ -16,9 +16,6 @@
 
 package co.mercenary.creators.kotlin.json
 
-import co.mercenary.creators.kotlin.json.path.*
 import co.mercenary.creators.kotlin.util.type.Copyable
 
-interface JSONBase<A, B : JSONBase<A, B>> : JSONAccess<A>, JSONAware, Copyable<B> {
-    fun path(): EvaluationContext = JSONPath.path(this)
-}
+interface JSONBase<A, B : JSONBase<A, B>> : JSONAccess<A>, JSONAware, JSONPathAware, Copyable<B>

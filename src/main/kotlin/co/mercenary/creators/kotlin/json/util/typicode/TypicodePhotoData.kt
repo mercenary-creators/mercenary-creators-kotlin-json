@@ -16,12 +16,15 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-import co.mercenary.creators.kotlin.json.*
+import co.mercenary.creators.kotlin.json.JSONObjectAware
+import java.net.URL
 
-data class TodoData(val userId: Int, val id: Int, val title: String, val completed: Boolean) : JSONObjectAware {
+data class TypicodePhotoData(val albumId: Int, val id: Int, val title: String, val url: String, val thumbnailUrl: String) : JSONObjectAware {
     override fun toString() = toJSONString()
+
     companion object {
-        const val LIST_SIZE = 200
-        const val BASE_PATH = "http://jsonplaceholder.typicode.com/todos"
+        const val LIST_SIZE = 5000
+        const val BASE_PATH = "http://jsonplaceholder.typicode.com/photos"
+        fun link() = URL(BASE_PATH)
     }
 }

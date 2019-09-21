@@ -38,6 +38,18 @@ typealias CompiledPath = co.mercenary.creators.kotlin.json.path.CompiledPath
 
 typealias EvaluationContext = co.mercenary.creators.kotlin.json.path.EvaluationContext
 
+typealias TypicodePostData = co.mercenary.creators.kotlin.json.util.typicode.TypicodePostData
+
+typealias TypicodeTodoData = co.mercenary.creators.kotlin.json.util.typicode.TypicodeTodoData
+
+typealias TypicodeUserData = co.mercenary.creators.kotlin.json.util.typicode.TypicodeUserData
+
+typealias TypicodePhotoData = co.mercenary.creators.kotlin.json.util.typicode.TypicodePhotoData
+
+typealias TypicodeAlbumData = co.mercenary.creators.kotlin.json.util.typicode.TypicodeAlbumData
+
+typealias TypicodeCommentData = co.mercenary.creators.kotlin.json.util.typicode.TypicodeCommentData
+
 inline fun <reified T : Any> EvaluationContext.eval(path: String): T = eval(path, object : TypeRef<T>() {})
 
 inline fun <reified T : Any> EvaluationContext.eval(path: CompiledPath): T = eval(path, object : TypeRef<T>() {})
@@ -110,6 +122,12 @@ fun toJSONString(data: Any, pretty: Boolean = true): String = when (data) {
     is JSONAware -> data.toJSONString(pretty)
     else -> JSONStatic.toJSONString(data, pretty)
 }
+
+fun isJSONValue(data: Any?) = JSONStatic.canSerializeValue(data)
+
+fun isJSONClass(data: Class<*>?) = JSONStatic.canSerializeClass(data)
+
+inline fun <reified T> isJSONClass() = JSONStatic.canSerializeClass(T::class.java)
 
 inline fun <reified T> toJavaClass(data: T) = JSONStatic.toJavaClass(data, T::class.java)
 

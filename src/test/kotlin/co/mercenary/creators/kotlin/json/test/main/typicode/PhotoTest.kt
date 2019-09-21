@@ -17,15 +17,14 @@
 package co.mercenary.creators.kotlin.json.test.main.typicode
 
 import co.mercenary.creators.kotlin.*
-import co.mercenary.creators.kotlin.json.util.typicode.PhotoData
 import org.junit.jupiter.api.Test
 
 class PhotoTest : KotlinTest() {
     @Test
     fun test() {
-        val list = toJSONArray(PhotoData.BASE_PATH.toURL())
+        val list = toJSONArray(TypicodePhotoData.link())
         info { list }
-        list.size.shouldBe(PhotoData.LIST_SIZE) {
+        list.size.shouldBe(TypicodePhotoData.LIST_SIZE) {
             list.size
         }
     }

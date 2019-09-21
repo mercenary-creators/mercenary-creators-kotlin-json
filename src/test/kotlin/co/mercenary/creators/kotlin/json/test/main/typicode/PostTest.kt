@@ -17,15 +17,14 @@
 package co.mercenary.creators.kotlin.json.test.main.typicode
 
 import co.mercenary.creators.kotlin.*
-import co.mercenary.creators.kotlin.json.util.typicode.PostData
 import org.junit.jupiter.api.Test
 
 class PostTest : KotlinTest() {
     @Test
     fun test() {
-        val list = toJSONArray(PostData.BASE_PATH.toURL())
+        val list = toJSONArray(TypicodePostData.link())
         info { list }
-        list.size.shouldBe(PostData.LIST_SIZE) {
+        list.size.shouldBe(TypicodePostData.LIST_SIZE) {
             list.size
         }
     }

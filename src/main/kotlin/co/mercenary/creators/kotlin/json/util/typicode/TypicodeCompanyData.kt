@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.test.main.typicode
+package co.mercenary.creators.kotlin.json.util.typicode
 
-import co.mercenary.creators.kotlin.*
-import org.junit.jupiter.api.Test
+import co.mercenary.creators.kotlin.json.*
 
-class UserTest : KotlinTest() {
-    @Test
-    fun test() {
-        val list = jsonRead<List<TypicodeUserData>>(TypicodeUserData.link())
-        info { toJSONString(list) }
-        list.size.shouldBe(TypicodeUserData.LIST_SIZE) {
-            list.size
-        }
-    }
+data class TypicodeCompanyData(val name: String, val catchPhrase: String, val bs: String) : JSONObjectAware {
+    override fun toString() = toJSONString()
 }
