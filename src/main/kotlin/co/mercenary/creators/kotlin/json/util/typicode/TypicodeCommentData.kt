@@ -25,6 +25,7 @@ data class TypicodeCommentData(val postId: Int, val id: Int, val name: String, v
     companion object {
         const val LIST_SIZE = 500
         const val BASE_PATH = "http://jsonplaceholder.typicode.com/comments"
-        fun link() = URL(BASE_PATH)
+        fun path() = BASE_PATH
+        fun link() = URL(path())
     }
 }

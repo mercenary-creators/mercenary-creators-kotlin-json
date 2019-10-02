@@ -146,6 +146,6 @@ open class JSONMapper : ObjectMapper {
         private val JSON_DATE_FORMAT = TimeAndDate.getDefaultDateFormat()
         private val TO_INDENT_PRINTS = DefaultIndenter().withIndent(SPACE_STRING.repeat(4))
         private val TO_PRETTY_PRINTS = DefaultPrettyPrinter().withArrayIndenter(TO_INDENT_PRINTS).withObjectIndenter(TO_INDENT_PRINTS)
-        private val EXTENDED_MODULES = listOf(Jdk8Module(), ParameterNamesModule(), JavaTimeModule(), MercenaryKotlinModule(), KotlinModule(), JodaModule())
+        private val EXTENDED_MODULES = listOf(Jdk8Module(), ParameterNamesModule(), JavaTimeModule(), KotlinModule(), JodaModule(), MercenaryKotlinModule())
     }
 }

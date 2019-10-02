@@ -230,7 +230,7 @@ object JSONStatic {
         toDataType(look, type)
     }
     catch (cause: Throwable) {
-        Throwables.assert(cause)
+        Throwables.thrown(cause)
         null
     }
 
@@ -242,7 +242,7 @@ object JSONStatic {
         toDataType(look, type)
     }
     catch (cause: Throwable) {
-        Throwables.assert(cause)
+        Throwables.thrown(cause)
         null
     }
 
@@ -254,7 +254,7 @@ object JSONStatic {
         toDataType(look, type)
     }
     catch (cause: Throwable) {
-        Throwables.assert(cause)
+        Throwables.thrown(cause)
         null
     }
 

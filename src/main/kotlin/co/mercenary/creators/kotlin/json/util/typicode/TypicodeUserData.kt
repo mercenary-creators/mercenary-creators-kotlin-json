@@ -25,6 +25,7 @@ data class TypicodeUserData(val id: Int, val name: String, val username: String,
     companion object {
         const val LIST_SIZE = 10
         const val BASE_PATH = "http://jsonplaceholder.typicode.com/users"
-        fun link() = URL(BASE_PATH)
+        fun path() = BASE_PATH
+        fun link() = URL(path())
     }
 }

@@ -120,8 +120,9 @@ object JSONPath {
         override fun map(path: CompiledPath, func: (Any, EvaluationContext) -> Any) = JSONEvaluationContext(context.map(lookup(path), mapper(func, context()))).context()
         override fun <T : Any> json(): T = context.json()
 
-        internal companion object {
-            private fun mapper(mapper: (Any, EvaluationContext) -> Any, context: EvaluationContext) = { data: Any, _: Configuration -> mapper(data, context) } as MapFunction
+        companion object {
+            @JvmStatic
+            fun mapper(mapper: (Any, EvaluationContext) -> Any, context: EvaluationContext) = { data: Any, _: Configuration -> mapper(data, context) } as MapFunction
         }
     }
 }

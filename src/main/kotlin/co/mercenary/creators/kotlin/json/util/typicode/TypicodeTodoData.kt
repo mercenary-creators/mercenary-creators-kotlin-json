@@ -25,6 +25,7 @@ data class TypicodeTodoData(val userId: Int, val id: Int, val title: String, val
     companion object {
         const val LIST_SIZE = 200
         const val BASE_PATH = "http://jsonplaceholder.typicode.com/todos"
-        fun link() = URL(BASE_PATH)
+        fun path() = BASE_PATH
+        fun link() = URL(path())
     }
 }

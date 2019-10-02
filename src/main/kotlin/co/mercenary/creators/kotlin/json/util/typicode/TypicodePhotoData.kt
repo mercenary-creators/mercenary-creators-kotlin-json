@@ -25,6 +25,7 @@ data class TypicodePhotoData(val albumId: Int, val id: Int, val title: String, v
     companion object {
         const val LIST_SIZE = 5000
         const val BASE_PATH = "http://jsonplaceholder.typicode.com/photos"
-        fun link() = URL(BASE_PATH)
+        fun path() = BASE_PATH
+        fun link() = URL(path())
     }
 }
