@@ -16,16 +16,21 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-import co.mercenary.creators.kotlin.json.JSONObjectAware
-import java.net.URL
+import co.mercenary.creators.kotlin.json.*
 
 data class TypicodeUserData(val id: Int, val name: String, val username: String, val email: String, val address: TypicodeAddressData, val phone: String, val website: String, val company: TypicodeCompanyData) : JSONObjectAware {
+
     override fun toString() = toJSONString()
 
     companion object {
-        const val LIST_SIZE = 10
-        const val BASE_PATH = "http://jsonplaceholder.typicode.com/users"
-        fun path() = BASE_PATH
-        fun link() = URL(path())
+
+        @JvmStatic
+        fun size() = 10
+
+        @JvmStatic
+        fun path() = "http://jsonplaceholder.typicode.com/users"
+
+        @JvmStatic
+        fun link() = LINK(path())
     }
 }

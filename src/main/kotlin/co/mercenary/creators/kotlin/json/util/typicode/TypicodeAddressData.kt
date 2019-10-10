@@ -16,7 +16,7 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-import co.mercenary.creators.kotlin.json.*
+import co.mercenary.creators.kotlin.json.JSONObjectAware
 
 data class TypicodeAddressData(val street: String, val suite: String, val city: String, val zipcode: String, val geo: TypicodeGeoData) : JSONObjectAware {
     override fun toString() = toJSONString()

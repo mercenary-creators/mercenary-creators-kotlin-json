@@ -16,7 +16,7 @@
 
 package co.mercenary.creators.kotlin.json.test.main.typicode
 
-import co.mercenary.creators.kotlin.*
+import co.mercenary.creators.kotlin.json.*
 import org.junit.jupiter.api.Test
 
 class TodoTest : KotlinTest() {
@@ -24,7 +24,7 @@ class TodoTest : KotlinTest() {
     fun test() {
         val list = toJSONArray(TypicodeTodoData.link())
         info { list }
-        list.size.shouldBe(TypicodeTodoData.LIST_SIZE) {
+        list.size.shouldBe(TypicodeTodoData.size()) {
             list.size
         }
     }

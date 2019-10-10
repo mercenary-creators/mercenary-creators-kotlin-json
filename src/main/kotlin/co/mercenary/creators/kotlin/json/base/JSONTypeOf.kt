@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json
+package co.mercenary.creators.kotlin.json.base
 
-interface JSONAware {
-    fun toByteArray() = JSONStatic.toByteArray(this)
-    fun toJSONString(pretty: Boolean = true) = JSONStatic.toJSONString(this, pretty)
-    fun toInputStream() = toByteArray().inputStream()
+enum class JSONTypeOf {
+    OBJECT, ARRAY, STRING, BOOLEAN, NUMBER, DATE, FUNCTION, NULL, UNDEFINED
 }

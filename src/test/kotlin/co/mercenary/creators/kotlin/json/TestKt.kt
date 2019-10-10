@@ -16,7 +16,7 @@
 
 @file:kotlin.jvm.JvmName("TestKt")
 
-package co.mercenary.creators.kotlin
+package co.mercenary.creators.kotlin.json
 
 typealias Executable = org.junit.jupiter.api.function.Executable
 

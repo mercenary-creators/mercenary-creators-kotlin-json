@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json
+package co.mercenary.creators.kotlin.json.base
 
+import co.mercenary.creators.kotlin.json.LINK
 import co.mercenary.creators.kotlin.json.module.MercenaryKotlinModule
 import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
 import co.mercenary.creators.kotlin.util.time.TimeAndDate
 import com.fasterxml.jackson.core.JsonGenerator.Feature.*
 import com.fasterxml.jackson.core.JsonParser.Feature.*
+import com.fasterxml.jackson.core.json.JsonWriteFeature.ESCAPE_NON_ASCII
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.core.util.*
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
@@ -33,18 +35,18 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import java.io.*
-import java.net.URL
 import java.nio.channels.ReadableByteChannel
 import java.nio.file.Path
 import kotlin.reflect.KClass
 
 open class JSONMapper : ObjectMapper {
 
+    @JvmOverloads
     constructor(pretty: Boolean = true) : super() {
         pretty(pretty)
             .registerModules(EXTENDED_MODULES)
             .setDateFormat(JSON_DATE_FORMAT).setTimeZone(DEFAULT_TIMEZONE)
-            .enable(ALLOW_COMMENTS).enable(ESCAPE_NON_ASCII).enable(WRITE_BIGDECIMAL_AS_PLAIN)
+            .enable(ALLOW_COMMENTS).enable(ESCAPE_NON_ASCII.mappedFeature()).enable(WRITE_BIGDECIMAL_AS_PLAIN)
             .disable(AUTO_CLOSE_SOURCE).disable(AUTO_CLOSE_TARGET).disable(FAIL_ON_UNKNOWN_PROPERTIES)
     }
 
@@ -86,7 +88,7 @@ open class JSONMapper : ObjectMapper {
 
     fun <T : Any> toDeepCopy(value: T, type: TypeReference<T>): T = readerFor(type).readValue(writeValueAsBytes(value))
 
-    fun <T : Any> jsonRead(value: URL, type: TypeReference<T>): T = readerFor(type).readValue(value)
+    fun <T : Any> jsonRead(value: LINK, type: TypeReference<T>): T = readerFor(type).readValue(value)
 
     fun <T : Any> jsonRead(value: String, type: TypeReference<T>): T = readerFor(type).readValue(value)
 
@@ -100,11 +102,13 @@ open class JSONMapper : ObjectMapper {
 
     fun <T : Any> jsonRead(value: ReadableByteChannel, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @JvmOverloads
     fun <T : Any> jsonRead(value: Reader, type: TypeReference<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
+    @JvmOverloads
     fun <T : Any> jsonRead(value: InputStream, type: TypeReference<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
-    fun <T : Any> jsonRead(value: URL, type: Class<T>): T = readerFor(type).readValue(value)
+    fun <T : Any> jsonRead(value: LINK, type: Class<T>): T = readerFor(type).readValue(value)
 
     fun <T : Any> jsonRead(value: String, type: Class<T>): T = readerFor(type).readValue(value)
 
@@ -118,11 +122,13 @@ open class JSONMapper : ObjectMapper {
 
     fun <T : Any> jsonRead(value: ReadableByteChannel, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @JvmOverloads
     fun <T : Any> jsonRead(value: Reader, type: Class<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
+    @JvmOverloads
     fun <T : Any> jsonRead(value: InputStream, type: Class<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
-    fun <T : Any> jsonRead(value: URL, type: KClass<T>): T = readerFor(type.java).readValue(value)
+    fun <T : Any> jsonRead(value: LINK, type: KClass<T>): T = readerFor(type.java).readValue(value)
 
     fun <T : Any> jsonRead(value: String, type: KClass<T>): T = readerFor(type.java).readValue(value)
 
@@ -136,8 +142,10 @@ open class JSONMapper : ObjectMapper {
 
     fun <T : Any> jsonRead(value: ReadableByteChannel, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue(it) }
 
+    @JvmOverloads
     fun <T : Any> jsonRead(value: Reader, type: KClass<T>, done: Boolean = true): T = if (done) value.use { readerFor(type.java).readValue<T>(it) } else readerFor(type.java).readValue<T>(value)
 
+    @JvmOverloads
     fun <T : Any> jsonRead(value: InputStream, type: KClass<T>, done: Boolean = true): T = if (done) value.use { readerFor(type.java).readValue<T>(it) } else readerFor(type.java).readValue<T>(value)
 
     companion object {

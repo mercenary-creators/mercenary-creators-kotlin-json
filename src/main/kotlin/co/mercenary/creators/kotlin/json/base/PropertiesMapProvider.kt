@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json
+package co.mercenary.creators.kotlin.json.base
 
-import co.mercenary.creators.kotlin.json.path.*
-
-interface JSONPathAware {
-    fun path(): EvaluationContext = JSONPath.path(this)
+interface PropertiesMapProvider {
+    fun toPropertiesMap(): Map<String, Any?>
 }

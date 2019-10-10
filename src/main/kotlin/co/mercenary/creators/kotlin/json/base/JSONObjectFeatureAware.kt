@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json
+package co.mercenary.creators.kotlin.json.base
 
 import co.mercenary.creators.kotlin.util.type.Copyable
 
-interface JSONBase<A, B : JSONBase<A, B>> : JSONAccess<A>, JSONAware, JSONPathAware, Copyable<B>
+interface JSONObjectFeatureAware<T> : JSONObjectAware, Copyable<T> {
+    fun json(vararg args: Pair<String, Any?>) = JSONObject(*args)
+}

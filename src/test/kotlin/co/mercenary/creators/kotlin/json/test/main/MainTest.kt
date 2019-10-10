@@ -16,7 +16,7 @@
 
 package co.mercenary.creators.kotlin.json.test.main
 
-import co.mercenary.creators.kotlin.*
+import co.mercenary.creators.kotlin.json.*
 import org.junit.jupiter.api.Test
 
 class MainTest : KotlinTest() {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json
+package co.mercenary.creators.kotlin.json.base
 
  class JSONObject : LinkedHashMap<String, Any?>, JSONBase<String, JSONObject> {
 
@@ -49,18 +49,6 @@ package co.mercenary.creators.kotlin.json
     override fun finderOf() = this::get
 
     operator fun set(k: String, v: Any?) = apply { put(k, v) }
-
-    operator fun plus(args: Pair<String, Any?>): JSONObject = plus(arrayOf(args))
-
-    operator fun plus(args: PropertiesMapProvider): JSONObject = plus(args.toPropertiesMap())
-
-    operator fun plus(args: Map<String, Any?>): JSONObject = JSONObject(this).apply { putAll(args) }
-
-    operator fun plus(args: Array<Pair<String, Any?>>): JSONObject = JSONObject(this).apply { putAll(args) }
-
-    operator fun plus(args: Iterable<Pair<String, Any?>>): JSONObject = JSONObject(this).apply { putAll(args) }
-
-    operator fun plus(args: Sequence<Pair<String, Any?>>): JSONObject = JSONObject(this).apply { putAll(args) }
 
     companion object {
         private const val serialVersionUID = 2L

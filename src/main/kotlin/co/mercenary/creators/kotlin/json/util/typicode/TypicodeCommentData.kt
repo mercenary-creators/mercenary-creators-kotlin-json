@@ -16,16 +16,21 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-import co.mercenary.creators.kotlin.json.JSONObjectAware
-import java.net.URL
+import co.mercenary.creators.kotlin.json.*
 
 data class TypicodeCommentData(val postId: Int, val id: Int, val name: String, val email: String, val body: String) : JSONObjectAware {
+
     override fun toString() = toJSONString()
 
     companion object {
-        const val LIST_SIZE = 500
-        const val BASE_PATH = "http://jsonplaceholder.typicode.com/comments"
-        fun path() = BASE_PATH
-        fun link() = URL(path())
+
+        @JvmStatic
+        fun size() = 500
+
+        @JvmStatic
+        fun path() = "http://jsonplaceholder.typicode.com/comments"
+
+        @JvmStatic
+        fun link() = LINK(path())
     }
 }

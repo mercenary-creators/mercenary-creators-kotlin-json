@@ -16,7 +16,7 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-import co.mercenary.creators.kotlin.json.*
+import co.mercenary.creators.kotlin.json.JSONObjectAware
 
 data class TypicodeGeoData(val lat: String, val lng: String) : JSONObjectAware {
     override fun toString() = toJSONString()

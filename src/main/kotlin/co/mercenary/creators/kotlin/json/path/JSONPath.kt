@@ -16,7 +16,8 @@
 
 package co.mercenary.creators.kotlin.json.path
 
-import co.mercenary.creators.kotlin.json.*
+import co.mercenary.creators.kotlin.json.LINK
+import co.mercenary.creators.kotlin.json.base.*
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
 import co.mercenary.creators.kotlin.util.toInputStream
 import com.jayway.jsonpath.*
@@ -24,7 +25,6 @@ import com.jayway.jsonpath.Option.SUPPRESS_EXCEPTIONS
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider
 import java.io.*
-import java.net.URL
 import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
@@ -32,7 +32,7 @@ import kotlin.reflect.KClass
 object JSONPath {
 
     private val CACHED: ConcurrentHashMap<String, JSONCompiledPath> by lazy {
-        return@lazy ConcurrentHashMap<String, JSONCompiledPath>()
+        ConcurrentHashMap<String, JSONCompiledPath>()
     }
 
     private val MAPPER: JSONMapper by lazy {
@@ -53,7 +53,7 @@ object JSONPath {
     fun path(data: Any) = JSONEvaluationContext(JsonPath.parse(data, CONFIG)).context()
 
     @JvmStatic
-    fun path(data: URL) = JSONEvaluationContext(JsonPath.parse(data, CONFIG)).context()
+    fun path(data: LINK) = JSONEvaluationContext(JsonPath.parse(data, CONFIG)).context()
 
     @JvmStatic
     fun path(data: File) = JSONEvaluationContext(JsonPath.parse(data.toInputStream(), CONFIG)).context()
@@ -122,7 +122,7 @@ object JSONPath {
 
         companion object {
             @JvmStatic
-            fun mapper(mapper: (Any, EvaluationContext) -> Any, context: EvaluationContext) = { data: Any, _: Configuration -> mapper(data, context) } as MapFunction
+            private fun mapper(mapper: (Any, EvaluationContext) -> Any, context: EvaluationContext) = { data: Any, _: Configuration -> mapper(data, context) } as MapFunction
         }
     }
 }

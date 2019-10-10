@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json
+package co.mercenary.creators.kotlin.json.base
 
 import com.fasterxml.jackson.core.type.TypeReference
 import java.util.*

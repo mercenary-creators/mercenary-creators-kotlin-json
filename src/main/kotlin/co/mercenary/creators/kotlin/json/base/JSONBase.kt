@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json
+package co.mercenary.creators.kotlin.json.base
 
-interface JSONObjectAware : JSONAware, JSONObjectProvider {
-    override fun toJSONObject(): JSONObject {
-        return JSONStatic.toJSONObject(toByteArray())
-    }
-}
+import co.mercenary.creators.kotlin.util.type.Copyable
+
+interface JSONBase<A, B : JSONBase<A, B>> : JSONAccess<A>, JSONAware, JSONPathAware, Copyable<B>

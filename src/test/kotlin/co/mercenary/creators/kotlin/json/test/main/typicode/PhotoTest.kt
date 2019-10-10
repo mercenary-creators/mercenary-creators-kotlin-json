@@ -16,7 +16,7 @@
 
 package co.mercenary.creators.kotlin.json.test.main.typicode
 
-import co.mercenary.creators.kotlin.*
+import co.mercenary.creators.kotlin.json.*
 import org.junit.jupiter.api.Test
 
 class PhotoTest : KotlinTest() {
@@ -24,7 +24,7 @@ class PhotoTest : KotlinTest() {
     fun test() {
         val list = toJSONArray(TypicodePhotoData.link())
         info { list }
-        list.size.shouldBe(TypicodePhotoData.LIST_SIZE) {
+        list.size.shouldBe(TypicodePhotoData.size()) {
             list.size
         }
     }

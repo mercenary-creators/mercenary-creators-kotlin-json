@@ -16,21 +16,26 @@
 
 @file:kotlin.jvm.JvmName("MainKt")
 
-package co.mercenary.creators.kotlin
+package co.mercenary.creators.kotlin.json
 
-import co.mercenary.creators.kotlin.json.*
-import co.mercenary.creators.kotlin.json.JSONArray
-import co.mercenary.creators.kotlin.json.JSONObject
+import co.mercenary.creators.kotlin.json.base.*
+import co.mercenary.creators.kotlin.json.base.JSONArray
+import co.mercenary.creators.kotlin.json.base.JSONObject
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
 import com.fasterxml.jackson.core.type.TypeReference
 import com.jayway.jsonpath.TypeRef
 import java.io.*
-import java.net.URL
 import java.nio.file.Path
 
 typealias JSONArray = JSONArray
 
 typealias JSONObject = JSONObject
+
+typealias LINK = java.net.URL
+
+typealias JSONObjectAware = co.mercenary.creators.kotlin.json.base.JSONObjectAware
+
+typealias JSONObjectFeatureAware<T> = co.mercenary.creators.kotlin.json.base.JSONObjectFeatureAware<T>
 
 typealias JSONPath = co.mercenary.creators.kotlin.json.path.JSONPath
 
@@ -74,7 +79,7 @@ fun json(args: Iterable<Pair<String, Any?>>) = JSONObject(args)
 
 fun json(args: Sequence<Pair<String, Any?>>) = JSONObject(args)
 
-fun json(data: URL) = JSONStatic.toJSONObject(data)
+fun json(data: LINK) = JSONStatic.toJSONObject(data)
 
 fun json(data: File) = JSONStatic.toJSONObject(data)
 
@@ -100,7 +105,7 @@ fun toJSONArray(args: Iterable<Any?>) = JSONArray(args)
 
 fun toJSONArray(args: Sequence<Any?>) = JSONArray(args)
 
-fun toJSONArray(data: URL) = JSONStatic.toJSONArray(data)
+fun toJSONArray(data: LINK) = JSONStatic.toJSONArray(data)
 
 fun toJSONArray(data: File) = JSONStatic.toJSONArray(data)
 
@@ -135,7 +140,7 @@ inline fun <reified T : Any> toDeepCopy(data: T): T = JSONStatic.toDeepCopy(data
 
 inline fun <reified T : Any> toDataType(data: Any): T = JSONStatic.toDataType(data, object : TypeReference<T>() {})
 
-inline fun <reified T : Any> jsonRead(data: URL) = JSONStatic.jsonRead(data, object : TypeReference<T>() {})
+inline fun <reified T : Any> jsonRead(data: LINK) = JSONStatic.jsonRead(data, object : TypeReference<T>() {})
 
 inline fun <reified T : Any> jsonRead(data: File) = JSONStatic.jsonRead(data, object : TypeReference<T>() {})
 

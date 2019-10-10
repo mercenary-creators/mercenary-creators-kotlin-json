@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json
+package co.mercenary.creators.kotlin.json.base
 
 class JSONArray : ArrayList<Any?>, JSONBase<Int, JSONArray> {
 
