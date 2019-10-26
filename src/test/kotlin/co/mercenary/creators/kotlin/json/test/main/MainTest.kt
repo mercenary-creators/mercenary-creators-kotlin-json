@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test
 class MainTest : KotlinTest() {
     @Test
     fun test() {
-        val data = json("author" to author, "age" to 53.years)
+        val data = json("author" to author, "age" to 53.years + 4.weeks)
         info { data }
         data.size shouldBe 2
         data["date"] = getTimeStamp(false).toDate()
