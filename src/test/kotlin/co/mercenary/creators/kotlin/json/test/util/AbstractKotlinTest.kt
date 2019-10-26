@@ -96,6 +96,18 @@ abstract class AbstractKotlinTest(val author: String = CREATORS_AUTHOR_INFO) : L
         }
     }
 
+    fun assertEquals(expected: Any?, actual: Any?) {
+        Assertions.assertEquals(expected, actual)
+    }
+
+    fun assertNotEquals(expected: Any?, actual: Any?) {
+        Assertions.assertNotEquals(expected, actual)
+    }
+
+    infix fun <T: Any?> T.shouldBe(value: T) = assertEquals(value, this)
+
+    infix fun <T: Any?> T.shouldNotBe(value: T) = assertNotEquals(value, this)
+
     fun <T : Any?> List<T>.shouldBe(value: Iterable<*>?, block: () -> Any?) = assertEquals(value?.toList(), this, block)
 
     fun <T : Any> T?.shouldBe(value: Any?, block: () -> Any?) = assertEquals(value, this, block)

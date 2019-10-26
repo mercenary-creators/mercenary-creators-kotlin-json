@@ -16,7 +16,7 @@
 
 package co.mercenary.creators.kotlin.json.base
 
- class JSONObject : LinkedHashMap<String, Any?>, JSONBase<String, JSONObject> {
+class JSONObject : LinkedHashMap<String, Any?>, JSONBase<String, JSONObject> {
 
     constructor() : super()
 

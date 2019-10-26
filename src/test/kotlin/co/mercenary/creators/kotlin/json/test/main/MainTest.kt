@@ -17,15 +17,17 @@
 package co.mercenary.creators.kotlin.json.test.main
 
 import co.mercenary.creators.kotlin.json.*
+import co.mercenary.creators.kotlin.util.*
 import org.junit.jupiter.api.Test
 
 class MainTest : KotlinTest() {
     @Test
     fun test() {
-        val data = json("author" to author, "year" to 1963)
+        val data = json("author" to author, "age" to 53.years)
         info { data }
-        data.size.shouldBe(2) {
-            data.size
-        }
+        data.size shouldBe 2
+        data["date"] = getTimeStamp(false).toDate()
+        info { data }
+        data.size shouldBe 3
     }
 }

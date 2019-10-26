@@ -18,4 +18,4 @@ package co.mercenary.creators.kotlin.json.module
 
 import com.fasterxml.jackson.databind.module.SimpleModule
 
-class MercenaryKotlinModule : SimpleModule("MercenaryKotlinModule", PackageVersion().version(), listOf(SequenceSerializer()))
+class MercenaryKotlinModule : SimpleModule("MercenaryKotlinModule", PackageVersion().version(), listOf(SequenceSerializer(), TimeDurationSerializer()))

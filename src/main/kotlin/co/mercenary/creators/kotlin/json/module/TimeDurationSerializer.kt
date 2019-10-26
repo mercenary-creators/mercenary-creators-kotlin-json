@@ -16,10 +16,11 @@
 
 package co.mercenary.creators.kotlin.json.module
 
-import com.fasterxml.jackson.core.*
-import com.fasterxml.jackson.core.util.VersionUtil
+import co.mercenary.creators.kotlin.util.time.TimeDuration
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
-class PackageVersion : Versioned {
-    private val version = VersionUtil.parseVersion("8.8.3-SNAPSHOT", "co.mercenary-creators", "mercenary-creators-kotlin-json")
-    override fun version(): Version = version
+class TimeDurationSerializer : StdSerializer<TimeDuration>(TimeDuration::class.java) {
+    override fun serialize(value: TimeDuration, generator: JsonGenerator, provider: SerializerProvider) = provider.defaultSerializeValue(value.parts(), generator)
 }
