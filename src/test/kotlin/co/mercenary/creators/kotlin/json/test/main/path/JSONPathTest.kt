@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test
 class JSONPathTest : KotlinTest() {
     @Test
     fun test() {
-        val path = JSONPath.path(RESOURCE_LOADER["data.json"])
+        val path = JSONPath.path(contentResourceLoader["data.json"])
         val data = path.eval<JSONObject>("$")
         info { data }
         data.size.shouldBe(10) {
