@@ -26,7 +26,7 @@ class MainTest : KotlinTest() {
         val data = json("author" to author, "age" to 53.years + 4.weeks)
         info { data }
         data.size shouldBe 2
-        data["date"] = getTimeStamp(false).toDate()
+        data["date"] = getTimeStamp().toDate()
         info { data }
         data.size shouldBe 3
     }
