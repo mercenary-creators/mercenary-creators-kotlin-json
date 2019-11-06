@@ -23,11 +23,16 @@ import org.junit.jupiter.api.Test
 class MainTest : KotlinTest() {
     @Test
     fun test() {
-        val data = json("author" to author, "age" to 53.years + 4.weeks)
-        info { data }
-        data.size shouldBe 2
-        data["date"] = getTimeStamp().toDate()
+        val data = json("author" to author, "age" to 53.years + 4.weeks, "list" to sequenceOf(2, 4))
         info { data }
         data.size shouldBe 3
+        data["date"] = getTimeStamp().toDate()
+        info { data }
+        data.size shouldBe 4
+        val main = MainData(53.years + 4.weeks, sequenceOf(2, 4))
+        val buff = main.toString()
+        info { buff }
+        val back = jsonRead<MainData>(buff)
+        info { back }
     }
 }

@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.module
+package co.mercenary.creators.kotlin.json.test.main
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.ser.std.StdSerializer
+import co.mercenary.creators.kotlin.json.base.JSONAware
+import co.mercenary.creators.kotlin.util.TimeDuration
 
-object SequenceSerializer : StdSerializer<Sequence<*>>(Sequence::class.java) {
-    override fun serialize(value: Sequence<*>, generator: JsonGenerator, provider: SerializerProvider) = provider.defaultSerializeValue(value.toList(), generator)
+data class MainData(val time: TimeDuration, val list: Sequence<Int>) : JSONAware {
+    override fun toString() = toJSONString()
 }

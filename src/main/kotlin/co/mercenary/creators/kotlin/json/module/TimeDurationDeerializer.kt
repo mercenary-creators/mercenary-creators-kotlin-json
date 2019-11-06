@@ -16,10 +16,16 @@
 
 package co.mercenary.creators.kotlin.json.module
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.ser.std.StdSerializer
+import co.mercenary.creators.kotlin.util.*
+import com.fasterxml.jackson.core.*
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
-object SequenceSerializer : StdSerializer<Sequence<*>>(Sequence::class.java) {
-    override fun serialize(value: Sequence<*>, generator: JsonGenerator, provider: SerializerProvider) = provider.defaultSerializeValue(value.toList(), generator)
+object TimeDurationDeerializer : StdDeserializer<TimeDuration>(TimeDuration::class.java) {
+    override fun deserialize(parser: JsonParser, context: DeserializationContext?): TimeDuration {
+        if (parser.currentToken == JsonToken.VALUE_STRING) {
+            return TimeDuration.parseCharSequence(parser.text)
+        }
+        throw MercenaryFatalExceptiion("not a string for TimeDuration")
+    }
 }

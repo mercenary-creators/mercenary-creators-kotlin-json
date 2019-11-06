@@ -16,10 +16,18 @@
 
 package co.mercenary.creators.kotlin.json.module
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.ser.std.StdSerializer
+import co.mercenary.creators.kotlin.util.TimeDuration
+import com.fasterxml.jackson.databind.*
+import com.fasterxml.jackson.databind.deser.Deserializers
 
-object SequenceSerializer : StdSerializer<Sequence<*>>(Sequence::class.java) {
-    override fun serialize(value: Sequence<*>, generator: JsonGenerator, provider: SerializerProvider) = provider.defaultSerializeValue(value.toList(), generator)
+class MercenaryKotlinDeserializers : Deserializers.Base() {
+    override fun findBeanDeserializer(type: JavaType, config: DeserializationConfig, bean: BeanDescription): JsonDeserializer<*>? {
+        return if (type.isInterface && type.hasRawClass(Sequence::class.java)) {
+            SequenceDeerializer
+        }
+        else if (type.hasRawClass(TimeDuration::class.java)) {
+            TimeDurationDeerializer
+        }
+        else null
+    }
 }
