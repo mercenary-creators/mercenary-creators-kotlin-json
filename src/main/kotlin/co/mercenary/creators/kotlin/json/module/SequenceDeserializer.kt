@@ -16,13 +16,12 @@
 
 package co.mercenary.creators.kotlin.json.module
 
-import co.mercenary.creators.kotlin.util.MercenarySequence
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
-object SequenceDeerializer : StdDeserializer<Sequence<*>>(Sequence::class.java) {
+object SequenceDeserializer : StdDeserializer<Sequence<*>>(Sequence::class.java) {
     override fun deserialize(parser: JsonParser, context: DeserializationContext): Sequence<*> {
-        return MercenarySequence(context.readValue(parser, List::class.java))
+        return context.readValue(parser, List::class.java).asSequence()
     }
 }
