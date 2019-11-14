@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
 object TimeDurationDeserializer : StdDeserializer<TimeDuration>(TimeDuration::class.java) {
-    override fun deserialize(parser: JsonParser, context: DeserializationContext?): TimeDuration {
+    override fun deserialize(parser: JsonParser, context: DeserializationContext): TimeDuration {
         return if (parser.currentToken == JsonToken.VALUE_STRING) TimeDuration.parseCharSequence(parser.text) else throw MercenaryFatalExceptiion("not a string for TimeDuration")
     }
 }
