@@ -22,10 +22,7 @@ import com.fasterxml.jackson.databind.deser.Deserializers
 
 class MercenaryKotlinDeserializers : Deserializers.Base() {
     override fun findBeanDeserializer(type: JavaType, config: DeserializationConfig, bean: BeanDescription): JsonDeserializer<*>? {
-        return if (type.isInterface && type.hasRawClass(Sequence::class.java)) {
-            SequenceDeserializer
-        }
-        else if (type.hasRawClass(TimeDuration::class.java)) {
+        return if (type.hasRawClass(TimeDuration::class.java)) {
             TimeDurationDeserializer
         }
         else null
