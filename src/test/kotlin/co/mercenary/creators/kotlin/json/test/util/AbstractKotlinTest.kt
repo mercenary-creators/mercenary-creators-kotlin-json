@@ -21,14 +21,17 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.function.Executable
 import java.util.*
 
-abstract class AbstractKotlinTest(val author: String = CREATORS_AUTHOR_INFO) : Logging() {
+abstract class AbstractKotlinTest @JvmOverloads constructor(protected val author: String = CREATORS_AUTHOR_INFO) : Logging() {
 
     private val conf: Properties by lazy {
         getConfigPropertiesBuilder().invoke()
     }
 
+    protected val loader = cachedContentResourceLoader
+
     protected open fun getConfigPropertiesBuilder(): () -> Properties = { Properties() }
 
+    @JvmOverloads
     fun getConfigProperty(name: String, other: String = EMPTY_STRING): String = conf.getProperty(name, other)
 
     fun setConfigProperty(vararg args: Pair<String, Any>) {
@@ -37,6 +40,18 @@ abstract class AbstractKotlinTest(val author: String = CREATORS_AUTHOR_INFO) : L
             for ((k, v) in args) {
                 temp.setProperty(k, v.toString())
             }
+        }
+    }
+
+    fun assertions(block: (MutableList<() -> Unit>) -> Unit) {
+        val list = mutableListOf<() -> Unit>()
+        block(list)
+        if (list.isNotEmpty()) {
+            val look = mutableListOf<Executable>()
+            list.forEach {
+                look += Executable { it() }
+            }
+            Assertions.assertAll(look)
         }
     }
 

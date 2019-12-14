@@ -22,10 +22,10 @@ import org.junit.jupiter.api.Test
 class UserTest : KotlinTest() {
     @Test
     fun test() {
-        val list = jsonRead<List<TypicodeUserData>>(TypicodeUserData.link())
-        info { toJSONString(list) }
-        list.size.shouldBe(TypicodeUserData.size()) {
-            list.size
+        jsonRead<List<TypicodeUserData>>(TypicodeUserData.link()).also { list ->
+            info { list.toJSONString() }
+            info { list.size }
+            list.size shouldBe TypicodeUserData.size()
         }
     }
 }

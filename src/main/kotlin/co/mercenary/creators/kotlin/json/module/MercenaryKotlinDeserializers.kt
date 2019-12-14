@@ -20,7 +20,7 @@ import co.mercenary.creators.kotlin.util.TimeDuration
 import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.deser.Deserializers
 
-class MercenaryKotlinDeserializers : Deserializers.Base() {
+object MercenaryKotlinDeserializers : Deserializers.Base() {
     override fun findBeanDeserializer(type: JavaType, config: DeserializationConfig, bean: BeanDescription): JsonDeserializer<*>? {
         return if (type.hasRawClass(TimeDuration::class.java)) {
             TimeDurationDeserializer

@@ -20,27 +20,30 @@ class JSONArray : ArrayList<Any?>, JSONBase<Int, JSONArray> {
 
     constructor() : super()
 
-    constructor(size: Int) : super(size)
-
     constructor(list: List<Any?>) : super(list)
 
     constructor(vararg list: Any?) : super(list.toList())
 
-    constructor(list: Iterable<Any?>) {
-        addAll(list)
-    }
+    constructor(list: Iterable<Any?>) : super(list.toList())
 
-    constructor(list: Sequence<Any?>) {
-        addAll(list)
-    }
+    constructor(list: Sequence<Any?>) : super(list.toList())
 
     override fun toString() = toJSONString()
+
+    override fun clone() = copyOf()
 
     override fun copyOf() = JSONStatic.toDeepCopy(this, JSONArray::class)
 
     override fun isDefined(look: Int) = look in 0 until size
 
     override fun finderOf() = this::get
+
+    override fun equals(other: Any?) = when (other) {
+        is JSONArray -> this === other || size == other.size && super.equals(other)
+        else -> false
+    }
+
+    override fun hashCode() = super.hashCode()
 
     companion object {
         private const val serialVersionUID = 2L

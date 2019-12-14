@@ -22,10 +22,10 @@ import org.junit.jupiter.api.Test
 class CommentTest : KotlinTest() {
     @Test
     fun test() {
-        val list = toJSONArray(TypicodeCommentData.link())
-        info { list }
-        list.size.shouldBe(TypicodeCommentData.size()) {
-            list.size
+        toJSONArray(TypicodeCommentData.link()).also { list ->
+            info { list }
+            info { list.size }
+            list.size shouldBe TypicodeCommentData.size()
         }
     }
 }

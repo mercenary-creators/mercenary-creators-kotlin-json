@@ -42,6 +42,8 @@ class JSONObject : LinkedHashMap<String, Any?>, JSONBase<String, JSONObject> {
 
     override fun toString() = toJSONString()
 
+    override fun clone() = copyOf()
+
     override fun copyOf() = JSONStatic.toDeepCopy(this, JSONObject::class)
 
     override fun isDefined(look: String) = look in keys
@@ -49,6 +51,13 @@ class JSONObject : LinkedHashMap<String, Any?>, JSONBase<String, JSONObject> {
     override fun finderOf() = this::get
 
     operator fun set(k: String, v: Any?) = apply { put(k, v) }
+
+    override fun equals(other: Any?) = when (other) {
+        is JSONObject -> this === other || size == other.size && super.equals(other)
+        else -> false
+    }
+
+    override fun hashCode() = super.hashCode()
 
     companion object {
         private const val serialVersionUID = 2L

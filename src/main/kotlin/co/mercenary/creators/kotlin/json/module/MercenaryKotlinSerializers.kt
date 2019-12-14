@@ -20,7 +20,7 @@ import co.mercenary.creators.kotlin.util.time.TimeDuration
 import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.ser.Serializers
 
-class MercenaryKotlinSerializers : Serializers.Base() {
+object MercenaryKotlinSerializers : Serializers.Base() {
     override fun findSerializer(config: SerializationConfig, type: JavaType, bean: BeanDescription): JsonSerializer<*>? = when {
         type.isTypeOrSubTypeOf(TimeDuration::class.java) -> TimeDurationSerializer
         else -> null

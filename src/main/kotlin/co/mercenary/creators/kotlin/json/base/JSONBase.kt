@@ -18,4 +18,4 @@ package co.mercenary.creators.kotlin.json.base
 
 import co.mercenary.creators.kotlin.util.type.Copyable
 
-interface JSONBase<A, B : JSONBase<A, B>> : JSONAccess<A>, JSONAware, JSONPathAware, Copyable<B>
+interface JSONBase<A, B : JSONBase<A, B>> : JSONAccess<A>, JSONAware, JSONPathAware, Copyable<B>, Cloneable

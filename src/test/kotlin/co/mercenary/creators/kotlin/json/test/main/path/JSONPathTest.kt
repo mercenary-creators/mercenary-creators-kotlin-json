@@ -17,57 +17,39 @@
 package co.mercenary.creators.kotlin.json.test.main.path
 
 import co.mercenary.creators.kotlin.json.*
-import co.mercenary.creators.kotlin.util.*
 import org.junit.jupiter.api.Test
 
 class JSONPathTest : KotlinTest() {
     @Test
     fun test() {
-        val path = JSONPath.path(contentResourceLoader["data.json"])
+        val path = JSONPath.path(loader["data.json"])
         val data = path.eval<JSONObject>("$")
         info { data }
-        data.size.shouldBe(10) {
-            "size is not 10"
-        }
+        data.size shouldBe 10
         val bool = path.eval<Boolean>("$.boolean-property")
         info { bool }
-        bool.shouldBe(true) {
-            "$bool is not true"
-        }
+        bool shouldBe true
         val nope = path.read<Any>("$.null-property")
         info { nope }
-        nope.shouldBe(null) {
-            "$nope is not null"
-        }
+        nope shouldBe null
         val json = path.eval<JSONObject>("$.store.book[0]")
         info { json }
-        json["category"].shouldBe("reference") {
-            "category is not reference"
-        }
+        json["category"] shouldBe "reference"
         val book = path.eval<BookData>("$.store.book[1]")
         info { book }
-        book.category.shouldBe("fiction") {
-            "category is not fiction"
-        }
+        book.category shouldBe "fiction"
         val lord = path.eval<BookData>("$.store.book[3]")
         info { lord }
-        lord.category.shouldBe("fiction") {
-            "category is not fiction"
-        }
-        lord.author.shouldBe("J. R. R. Tolkien") {
-            "author is not J. R. R. Tolkien"
-        }
-        lord.isbn.shouldBe("0-395-19395-8") {
-            "isbn is not 0-395-19395-8"
-        }
-        lord.price.shouldBe(22.99) {
-            "price is not 22.99"
+        assertions { list ->
+            list += { lord.category shouldBe "fiction" }
+            list += { lord.author shouldBe "J. R. R. Tolkien" }
+            list += { lord.isbn shouldBe "0-395-19395-8" }
+            list += { lord.price shouldBe 22.99 }
         }
         val list = path.eval<List<BookData>>("$.store.book[*]")
-        info { toJSONString(list) }
-        list[3].author.shouldBe("J. R. R. Tolkien") {
-            "author is not J. R. R. Tolkien"
-        }
-        info { path.deep().delete("$.null-property").delete("$.foo").delete("$.@id").set("$.int-max-property", 1111).add("$.store.book", BookData("reference", "Dean S. Jones", "Kotlin 1.3", "0-395-19395-8", 52.99)).put("$", "dean", 55).eval<JSONObject>("$") }
+        info { list.toJSONString() }
+        list.size shouldBe 4
+        list[3].author shouldBe "J. R. R. Tolkien"
+        debug { path.deep().delete("$.null-property").delete("$.foo").delete("$.@id").set("$.int-max-property", 1111).add("$.store.book", BookData("reference", "Dean S. Jones", "Kotlin 1.3", "0-395-19395-8", 52.99)).put("$", "dean", 55).eval<JSONObject>("$") }
     }
 }

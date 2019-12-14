@@ -43,11 +43,11 @@ object JSONPath {
         Configuration.builder().jsonProvider(JSONJacksonProvider(MAPPER)).mappingProvider(JSONJacksonMappingProvider(MAPPER)).options(SUPPRESS_EXCEPTIONS).build()
     }
 
-    internal fun lookup(path: String) = cached(path).compiled
+    private fun lookup(path: String) = cached(path).compiled
 
-    internal fun lookup(path: CompiledPath) = lookup(path.toPathSpec())
+    private fun lookup(path: CompiledPath) = lookup(path.toPathSpec())
 
-    internal fun cached(path: String) = CACHED.computeIfAbsent(path) { JSONCompiledPath(it) }
+    private fun cached(path: String) = CACHED.computeIfAbsent(path) { JSONCompiledPath(it) }
 
     @JvmStatic
     fun path(data: Any) = JSONEvaluationContext(JsonPath.parse(data, CONFIG)).context()

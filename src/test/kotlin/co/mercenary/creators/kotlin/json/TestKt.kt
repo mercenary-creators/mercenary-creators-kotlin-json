@@ -18,6 +18,6 @@
 
 package co.mercenary.creators.kotlin.json
 
-typealias Executable = org.junit.jupiter.api.function.Executable
-
 typealias KotlinTest = co.mercenary.creators.kotlin.json.test.util.AbstractKotlinTest
+
+fun <T : Any> T.toJSONString(pretty: Boolean = true): String = toJSONString(this, pretty)

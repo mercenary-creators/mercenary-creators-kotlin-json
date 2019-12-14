@@ -22,10 +22,10 @@ import org.junit.jupiter.api.Test
 class PhotoTest : KotlinTest() {
     @Test
     fun test() {
-        val list = toJSONArray(TypicodePhotoData.link())
-        info { list }
-        list.size.shouldBe(TypicodePhotoData.size()) {
-            list.size
+        toJSONArray(TypicodePhotoData.link()).also { list ->
+            info { list }
+            info { list.size }
+            list.size shouldBe TypicodePhotoData.size()
         }
     }
 }

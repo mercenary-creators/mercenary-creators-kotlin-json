@@ -22,10 +22,10 @@ import org.junit.jupiter.api.Test
 class PostTest : KotlinTest() {
     @Test
     fun test() {
-        val list = toJSONArray(TypicodePostData.link())
-        info { list }
-        list.size.shouldBe(TypicodePostData.size()) {
-            list.size
+        toJSONArray(TypicodePostData.link()).also { list ->
+            info { list }
+            info { list.size }
+            list.size shouldBe TypicodePostData.size()
         }
     }
 }

@@ -26,7 +26,7 @@ class MainTest : KotlinTest() {
         val data = json("author" to author, "age" to 53.years + 4.weeks, "list" to sequenceOf(2, 4))
         info { data }
         data.size shouldBe 3
-        data["date"] = getTimeStamp().toDate()
+        data["date"] = dateOf()
         info { data }
         data.size shouldBe 4
         val main = MainData(53.years + 4.weeks, sequenceOf(2, 4))
