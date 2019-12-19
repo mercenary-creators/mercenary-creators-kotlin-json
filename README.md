@@ -10,7 +10,7 @@ Maven:
 <dependency>
   <groupId>co.mercenary-creators</groupId>
   <artifactId>mercenary-creators-kotlin-json</artifactId>
-  <version>9.2.0-SNAPSHOT</version>
+  <version>9.2.2-SNAPSHOT</version>
 </dependency>
 ```
 Gradle:
