@@ -22,8 +22,6 @@ class JSONObject : LinkedHashMap<String, Any?>, JSONBase<String, JSONObject> {
 
     constructor(args: Map<String, Any?>) : super(args)
 
-    constructor(args: PropertiesMapProvider) : super(args.toPropertiesMap())
-
     constructor(k: String, v: Any?) {
         set(k, v)
     }
@@ -49,8 +47,6 @@ class JSONObject : LinkedHashMap<String, Any?>, JSONBase<String, JSONObject> {
     override fun isDefined(look: String) = look in keys
 
     override fun finderOf() = this::get
-
-    operator fun set(k: String, v: Any?) = apply { put(k, v) }
 
     override fun equals(other: Any?) = when (other) {
         is JSONObject -> this === other || size == other.size && super.equals(other)

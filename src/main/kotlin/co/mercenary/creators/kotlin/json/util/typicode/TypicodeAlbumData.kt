@@ -17,6 +17,7 @@
 package co.mercenary.creators.kotlin.json.util.typicode
 
 import co.mercenary.creators.kotlin.json.*
+import co.mercenary.creators.kotlin.json.base.JSONObjectAware
 
 data class TypicodeAlbumData(val userId: Int, val id: Int, val title: String) : JSONObjectAware {
 

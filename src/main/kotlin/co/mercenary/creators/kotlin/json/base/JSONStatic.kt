@@ -89,7 +89,6 @@ object JSONStatic {
     fun isObject(look: Any?) = when (look) {
         null -> false
         is Map<*, *> -> true
-        is PropertiesMapProvider -> true
         isFunction(look) -> false
         isDataClass(look) -> true
         else -> asObject(look) != null
@@ -210,7 +209,6 @@ object JSONStatic {
         null -> null
         is JSONObject -> look
         is JSONObjectProvider -> look.toJSONObject()
-        is PropertiesMapProvider -> JSONObject(look)
         else -> asDataTypeOf(look, JSONObject::class)
     }
 

@@ -30,7 +30,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PRO
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
-import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
@@ -154,6 +153,6 @@ open class JSONMapper : ObjectMapper {
         private val JSON_DATE_FORMAT = TimeAndDate.getDefaultDateFormat()
         private val TO_INDENT_PRINTS = DefaultIndenter().withIndent(SPACE_STRING.repeat(4))
         private val TO_PRETTY_PRINTS = DefaultPrettyPrinter().withArrayIndenter(TO_INDENT_PRINTS).withObjectIndenter(TO_INDENT_PRINTS)
-        private val EXTENDED_MODULES = listOf(Jdk8Module(), ParameterNamesModule(), JavaTimeModule(), KotlinModule(), JodaModule(), MercenaryKotlinModule())
+        private val EXTENDED_MODULES = listOf(Jdk8Module(), ParameterNamesModule(), JavaTimeModule(), KotlinModule(), MercenaryKotlinModule())
     }
 }

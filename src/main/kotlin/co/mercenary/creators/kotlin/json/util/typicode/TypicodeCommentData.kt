@@ -17,6 +17,7 @@
 package co.mercenary.creators.kotlin.json.util.typicode
 
 import co.mercenary.creators.kotlin.json.*
+import co.mercenary.creators.kotlin.json.base.JSONObjectAware
 
 data class TypicodeCommentData(val postId: Int, val id: Int, val name: String, val email: String, val body: String) : JSONObjectAware {
 

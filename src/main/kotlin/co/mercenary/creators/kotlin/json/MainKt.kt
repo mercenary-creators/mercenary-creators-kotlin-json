@@ -33,10 +33,6 @@ typealias JSONObject = JSONObject
 
 typealias LINK = java.net.URL
 
-typealias JSONObjectAware = co.mercenary.creators.kotlin.json.base.JSONObjectAware
-
-typealias JSONObjectFeatureAware<T> = co.mercenary.creators.kotlin.json.base.JSONObjectFeatureAware<T>
-
 typealias JSONPath = co.mercenary.creators.kotlin.json.path.JSONPath
 
 typealias CompiledPath = co.mercenary.creators.kotlin.json.path.CompiledPath
@@ -70,8 +66,6 @@ fun json(k: String, v: Any?) = JSONObject(k, v)
 fun json(args: Map<String, Any?>) = JSONObject(args)
 
 fun json(args: Pair<String, Any?>) = JSONObject(args)
-
-fun json(args: PropertiesMapProvider) = JSONObject(args)
 
 fun json(vararg args: Pair<String, Any?>) = JSONObject(*args)
 
