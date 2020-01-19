@@ -27,7 +27,7 @@ abstract class AbstractKotlinTest @JvmOverloads constructor(protected val author
         getConfigPropertiesBuilder().invoke()
     }
 
-    protected val loader = cachedContentResourceLoader
+    protected val loader = CACHED_CONTENT_RESOURCE_LOADER
 
     protected open fun getConfigPropertiesBuilder(): () -> Properties = { Properties() }
 
