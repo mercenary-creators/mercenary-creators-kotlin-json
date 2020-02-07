@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Mercenary Creators Company. All rights reserved.
+ * Copyright (c) 2020, Mercenary Creators Company. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package co.mercenary.creators.kotlin.json.base
 
 import co.mercenary.creators.kotlin.json.LINK
-import co.mercenary.creators.kotlin.util.Throwables
+import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
 import com.fasterxml.jackson.core.type.TypeReference
 import java.io.*
@@ -25,13 +25,18 @@ import java.math.*
 import java.nio.channels.ReadableByteChannel
 import java.nio.file.Path
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.reflect.*
 
 object JSONStatic {
 
-    private val PRETTY = JSONMapper(true)
+    private val PRETTY: JSONMapper by lazy {
+        JSONMapper(true)
+    }
 
-    private val NORMAL = JSONMapper(false)
+    private val NORMAL: JSONMapper by lazy {
+        JSONMapper(false)
+    }
 
     private const val IR_MAX = Int.MAX_VALUE
 
@@ -53,7 +58,7 @@ object JSONStatic {
 
     private val DI_MIN = Double.MAX_VALUE.toBigDecimal().negate().toBigInteger()
 
-    internal fun getTypeOf(look: Number): JSONTypeOf = if (isNumber(look)) JSONTypeOf.NUMBER else JSONTypeOf.UNDEFINED
+    private fun getTypeOf(look: Number): JSONTypeOf = if (isNumber(look)) JSONTypeOf.NUMBER else JSONTypeOf.UNDEFINED
 
     @JvmStatic
     fun getTypeOf(look: Any?) = when (look) {
@@ -187,13 +192,22 @@ object JSONStatic {
     fun asString(look: Any?): String? = when (look) {
         null -> null
         is String -> look
-        else -> null
+        else -> {
+            try {
+                look.toString()
+            }
+            catch (cause: Throwable) {
+                Throwables.thrown(cause)
+                null
+            }
+        }
     }
 
     @JvmStatic
     fun asBoolean(look: Any?): Boolean? = when (look) {
         null -> null
         is Boolean -> look
+        is AtomicBoolean -> look.toBoolean()
         else -> null
     }
 
@@ -443,8 +457,7 @@ object JSONStatic {
     fun <T> toJavaClass(data: T, type: Class<T>): Class<T> = if (type.isInstance(data)) type else type
 
     @JvmStatic
-    fun <T : Any> cast(data: Any, type: Class<T>): T? = if (type.isInstance(data)) type.cast(data) else null
+    fun <T : Any> cast(data: Any, type: Class<T>): T? = if (type.isInstance(data)) type.cast(data) else NORMAL.toDataType(data, type)
 
-    @JvmOverloads
-    internal fun mapperOf(pretty: Boolean = true) = if (pretty) PRETTY else NORMAL
+    private fun mapperOf(pretty: Boolean = true) = if (pretty) PRETTY else NORMAL
 }

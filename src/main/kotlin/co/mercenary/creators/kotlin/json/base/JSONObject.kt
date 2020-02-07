@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Mercenary Creators Company. All rights reserved.
+ * Copyright (c) 2020, Mercenary Creators Company. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,19 +23,25 @@ class JSONObject : LinkedHashMap<String, Any?>, JSONBase<String, JSONObject> {
     constructor(args: Map<String, Any?>) : super(args)
 
     constructor(k: String, v: Any?) {
-        set(k, v)
+        put(k, v)
     }
 
     constructor(vararg args: Pair<String, Any?>) {
-        putAll(args)
+        for ((k, v) in args) {
+            put(k, v)
+        }
     }
 
     constructor(args: Iterable<Pair<String, Any?>>) {
-        putAll(args)
+        for ((k, v) in args) {
+            put(k, v)
+        }
     }
 
     constructor(args: Sequence<Pair<String, Any?>>) {
-        putAll(args)
+        for ((k, v) in args) {
+            put(k, v)
+        }
     }
 
     override fun toString() = toJSONString()

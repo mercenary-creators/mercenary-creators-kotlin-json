@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Mercenary Creators Company. All rights reserved.
+ * Copyright (c) 2020, Mercenary Creators Company. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +50,6 @@ class JSONPathTest : KotlinTest() {
         info { list.toJSONString() }
         list.size shouldBe 4
         list[3].author shouldBe "J. R. R. Tolkien"
-        debug { path.deep().delete("$.null-property").delete("$.foo").delete("$.@id").set("$.int-max-property", 1111).add("$.store.book", BookData("reference", "Dean S. Jones", "Kotlin 1.3", "0-395-19395-8", 52.99)).put("$", "dean", 55).eval<JSONObject>("$") }
+        info { path.deep().delete("$.null-property").delete("$.foo").delete("$.@id").set("$.int-max-property", 1111).add("$.store.book", BookData("reference", "Dean S. Jones", "Kotlin 1.3", "0-395-19395-8", 52.99)).put("$", "dean", 55).eval<JSONObject>("$") }
     }
 }

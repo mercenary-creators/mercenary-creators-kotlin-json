@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Mercenary Creators Company. All rights reserved.
+ * Copyright (c) 2020, Mercenary Creators Company. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ class MainTest : KotlinTest() {
     @Test
     fun test() {
         val data = json("author" to author, "age" to 53.years + 4.weeks, "list" to sequenceOf(2, 4))
-        info { data }
+        info { data.copyOf() }
         data.size shouldBe 3
         data["date"] = dateOf()
         info { data }

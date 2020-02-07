@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Mercenary Creators Company. All rights reserved.
+ * Copyright (c) 2020, Mercenary Creators Company. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package co.mercenary.creators.kotlin.json.base
 
 import co.mercenary.creators.kotlin.json.LINK
-import co.mercenary.creators.kotlin.json.module.MercenaryKotlinModule
 import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
 import co.mercenary.creators.kotlin.util.time.TimeAndDate
@@ -29,10 +28,6 @@ import com.fasterxml.jackson.core.util.*
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import java.io.*
 import java.nio.channels.ReadableByteChannel
 import java.nio.file.Path
@@ -56,14 +51,6 @@ open class JSONMapper : ObjectMapper {
     override fun canSerialize(type: Class<*>?) = if (null == type) false else super.canSerialize(type)
 
     private fun pretty(pretty: Boolean): ObjectMapper = if (pretty) setDefaultPrettyPrinter(TO_PRETTY_PRINTS).enable(INDENT_OUTPUT) else disable(INDENT_OUTPUT)
-
-    fun isPretty(): Boolean = isEnabled(INDENT_OUTPUT)
-
-    fun setPretty(pretty: Boolean) {
-        if (pretty != isPretty()) {
-            pretty(pretty)
-        }
-    }
 
     fun canSerializeClass(type: Class<*>?) = canSerialize(type)
 
@@ -149,10 +136,10 @@ open class JSONMapper : ObjectMapper {
 
     companion object {
         private const val serialVersionUID = 2L
+        private val EXTENDED_MODULES = findModules()
         private val DEFAULT_TIMEZONE = TimeAndDate.getDefaultTimeZone()
         private val JSON_DATE_FORMAT = TimeAndDate.getDefaultDateFormat()
         private val TO_INDENT_PRINTS = DefaultIndenter().withIndent(SPACE_STRING.repeat(4))
         private val TO_PRETTY_PRINTS = DefaultPrettyPrinter().withArrayIndenter(TO_INDENT_PRINTS).withObjectIndenter(TO_INDENT_PRINTS)
-        private val EXTENDED_MODULES = listOf(Jdk8Module(), ParameterNamesModule(), JavaTimeModule(), KotlinModule(), MercenaryKotlinModule())
     }
 }

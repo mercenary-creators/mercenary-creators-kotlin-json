@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Mercenary Creators Company. All rights reserved.
+ * Copyright (c) 2020, Mercenary Creators Company. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,6 @@ import com.fasterxml.jackson.core.*
 import com.fasterxml.jackson.core.util.VersionUtil
 
 object PackageVersion : Versioned {
-    private val version = VersionUtil.parseVersion("9.3.1-SNAPSHOT", "co.mercenary-creators", "mercenary-creators-kotlin-json")
+    private val version = VersionUtil.parseVersion("9.3.5-SNAPSHOT", "co.mercenary-creators", "mercenary-creators-kotlin-json")
     override fun version(): Version = version
 }

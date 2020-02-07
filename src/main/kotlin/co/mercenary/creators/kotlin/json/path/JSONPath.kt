@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Mercenary Creators Company. All rights reserved.
+ * Copyright (c) 2020, Mercenary Creators Company. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,22 +18,19 @@ package co.mercenary.creators.kotlin.json.path
 
 import co.mercenary.creators.kotlin.json.LINK
 import co.mercenary.creators.kotlin.json.base.*
+import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
-import co.mercenary.creators.kotlin.util.toInputStream
 import com.jayway.jsonpath.*
 import com.jayway.jsonpath.Option.SUPPRESS_EXCEPTIONS
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider
 import java.io.*
 import java.nio.file.Path
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
 object JSONPath {
 
-    private val CACHED: ConcurrentHashMap<String, JSONCompiledPath> by lazy {
-        ConcurrentHashMap<String, JSONCompiledPath>()
-    }
+    private val CACHED = AtomicHashMap<String, JSONCompiledPath>()
 
     private val MAPPER: JSONMapper by lazy {
         JSONMapper(false)

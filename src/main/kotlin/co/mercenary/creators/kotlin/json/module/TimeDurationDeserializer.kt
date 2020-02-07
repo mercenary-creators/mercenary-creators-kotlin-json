@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Mercenary Creators Company. All rights reserved.
+ * Copyright (c) 2020, Mercenary Creators Company. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,23 @@
 
 package co.mercenary.creators.kotlin.json.module
 
-import co.mercenary.creators.kotlin.util.*
+import co.mercenary.creators.kotlin.util.TimeDuration
 import com.fasterxml.jackson.core.*
-import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
 object TimeDurationDeserializer : StdDeserializer<TimeDuration>(TimeDuration::class.java) {
     override fun deserialize(parser: JsonParser, context: DeserializationContext): TimeDuration {
-        return if (parser.currentToken == JsonToken.VALUE_STRING) TimeDuration.parseCharSequence(parser.text) else throw MercenaryFatalExceptiion("not a string for TimeDuration")
+        return when (parser.currentToken) {
+            JsonToken.VALUE_STRING -> {
+                try {
+                    TimeDuration.parse(parser.text)
+                }
+                catch (cause: Throwable) {
+                    throw JsonMappingException(parser, "error string for TimeDuration", cause)
+                }
+            }
+            else -> throw JsonMappingException(parser, "not a string for TimeDuration")
+        }
     }
 }

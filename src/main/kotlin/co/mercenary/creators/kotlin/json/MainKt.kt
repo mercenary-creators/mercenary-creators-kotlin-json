@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Mercenary Creators Company. All rights reserved.
+ * Copyright (c) 2020, Mercenary Creators Company. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -149,3 +149,5 @@ inline fun <reified T : Any> jsonRead(data: Reader, done: Boolean = true) = JSON
 inline fun <reified T : Any> jsonRead(data: InputStream, done: Boolean = true) = JSONStatic.jsonRead(data, object : TypeReference<T>() {}, done)
 
 inline fun <reified T : Any> jsonRead(data: InputStreamSupplier) = JSONStatic.jsonRead(data, object : TypeReference<T>() {})
+
+inline fun <reified T : Any, A> JSONAccess<A>.asDataTypeOf(look: A): T? = JSONStatic.asDataTypeOf(accessOf(look), object : TypeReference<T>() {})

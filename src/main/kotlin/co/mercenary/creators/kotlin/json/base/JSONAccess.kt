@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Mercenary Creators Company. All rights reserved.
+ * Copyright (c) 2020, Mercenary Creators Company. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,7 @@
 
 package co.mercenary.creators.kotlin.json.base
 
-import com.fasterxml.jackson.core.type.TypeReference
 import java.util.*
-import kotlin.reflect.KClass
 
 interface JSONAccess<A> {
     fun finderOf(): (A) -> Any?
@@ -45,7 +43,4 @@ interface JSONAccess<A> {
     fun asArray(look: A): JSONArray? = JSONStatic.asArray(accessOf(look))
     fun asObject(look: A): JSONObject? = JSONStatic.asObject(accessOf(look))
     fun accessOf(look: A): Any? = if (isDefined(look)) finderOf().invoke(look) else null
-    fun <T : Any> asDataTypeOf(look: A, type: Class<T>): T? = JSONStatic.asDataTypeOf(accessOf(look), type)
-    fun <T : Any> asDataTypeOf(look: A, type: KClass<T>): T? = JSONStatic.asDataTypeOf(accessOf(look), type)
-    fun <T : Any> asDataTypeOf(look: A, type: TypeReference<T>): T? = JSONStatic.asDataTypeOf(accessOf(look), type)
 }

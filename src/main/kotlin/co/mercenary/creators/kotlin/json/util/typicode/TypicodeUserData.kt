@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Mercenary Creators Company. All rights reserved.
+ * Copyright (c) 2020, Mercenary Creators Company. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,9 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-import co.mercenary.creators.kotlin.json.*
-import co.mercenary.creators.kotlin.json.base.JSONObjectAware
+import co.mercenary.creators.kotlin.json.base.JSONAware
 
-data class TypicodeUserData(val id: Int, val name: String, val username: String, val email: String, val address: TypicodeAddressData, val phone: String, val website: String, val company: TypicodeCompanyData) : JSONObjectAware {
+data class TypicodeUserData(val id: Int, val name: String, val username: String, val email: String, val address: TypicodeAddressData, val phone: String, val website: String, val company: TypicodeCompanyData) : JSONAware {
 
     override fun toString() = toJSONString()
 
@@ -30,8 +29,5 @@ data class TypicodeUserData(val id: Int, val name: String, val username: String,
 
         @JvmStatic
         fun path() = "http://jsonplaceholder.typicode.com/users"
-
-        @JvmStatic
-        fun link() = LINK(path())
     }
 }
