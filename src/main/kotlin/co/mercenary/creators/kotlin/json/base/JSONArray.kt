@@ -20,7 +20,7 @@ class JSONArray : ArrayList<Any?>, JSONBase<Int, JSONArray> {
 
     constructor() : super()
 
-    constructor(list: List<Any?>) : super(list)
+    constructor(list: List<Any?>) : super(list.toList())
 
     constructor(vararg list: Any?) : super(list.toList())
 

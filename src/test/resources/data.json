@@ -40,7 +40,7 @@
       "escape": "Esc\b\f\n\r\t\n\t*",
       "color": "red",
       "display-price": 19.95,
-      "foo:bar": "fooBar",
+      "foo:bar": "Maël Hörz",
       "dot.notation": "new",
       "dash-notation": "dashes"
     }

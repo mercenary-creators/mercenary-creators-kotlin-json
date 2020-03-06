@@ -17,16 +17,16 @@
 package co.mercenary.creators.kotlin.json.test.main.typicode
 
 import co.mercenary.creators.kotlin.json.*
-import co.mercenary.creators.kotlin.util.toURL
 import org.junit.jupiter.api.Test
 
 class UserTest : KotlinTest() {
     @Test
     fun test() {
-        jsonRead<List<TypicodeUserData>>(TypicodeUserData.path().toURL()).also { list ->
-            info { list.toJSONString() }
+        TypicodeUserData.path().toLink().jsonReadOf<List<TypicodeUserData>>().also { list ->
+            info { list }
             info { list.size }
             list.size shouldBe TypicodeUserData.size()
         }
+        warn { here() }
     }
 }

@@ -16,16 +16,6 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-data class TypicodePhotoData(val albumId: Int, val id: Int, val title: String, val url: String, val thumbnailUrl: String) : Typicode {
+import co.mercenary.creators.kotlin.json.base.JSONAware
 
-    override fun toString() = toJSONString()
-
-    companion object {
-
-        @JvmStatic
-        fun size() = 5000
-
-        @JvmStatic
-        fun path() = "http://jsonplaceholder.typicode.com/photos"
-    }
-}
+interface Typicode : JSONAware

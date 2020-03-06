@@ -17,13 +17,12 @@
 package co.mercenary.creators.kotlin.json.test.main.typicode
 
 import co.mercenary.creators.kotlin.json.*
-import co.mercenary.creators.kotlin.util.toURL
 import org.junit.jupiter.api.Test
 
 class CommentTest : KotlinTest() {
     @Test
     fun test() {
-        toJSONArray(TypicodeCommentData.path().toURL()).also { list ->
+        TypicodeCommentData.path().toLink().jsonReadOf<List<TypicodeCommentData>>().also { list ->
             info { list }
             info { list.size }
             list.size shouldBe TypicodeCommentData.size()

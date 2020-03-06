@@ -17,13 +17,12 @@
 package co.mercenary.creators.kotlin.json.test.main.typicode
 
 import co.mercenary.creators.kotlin.json.*
-import co.mercenary.creators.kotlin.util.toURL
 import org.junit.jupiter.api.Test
 
 class AlbumTest : KotlinTest() {
     @Test
     fun test() {
-        toJSONArray(TypicodeAlbumData.path().toURL()).also { list ->
+        TypicodeAlbumData.path().toLink().jsonReadOf<List<TypicodeAlbumData>>().also { list ->
             info { list }
             info { list.size }
             list.size shouldBe TypicodeAlbumData.size()

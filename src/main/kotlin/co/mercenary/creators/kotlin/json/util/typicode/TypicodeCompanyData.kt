@@ -16,8 +16,6 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-import co.mercenary.creators.kotlin.json.base.JSONAware
-
-data class TypicodeCompanyData(val name: String, val catchPhrase: String, val bs: String) : JSONAware {
+data class TypicodeCompanyData(val name: String, val catchPhrase: String, val bs: String) : Typicode {
     override fun toString() = toJSONString()
 }

@@ -16,7 +16,6 @@
 
 package co.mercenary.creators.kotlin.json.path
 
-import co.mercenary.creators.kotlin.json.LINK
 import co.mercenary.creators.kotlin.json.base.*
 import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
@@ -25,6 +24,7 @@ import com.jayway.jsonpath.Option.SUPPRESS_EXCEPTIONS
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider
 import java.io.*
+import java.net.*
 import java.nio.file.Path
 import kotlin.reflect.KClass
 
@@ -50,7 +50,10 @@ object JSONPath {
     fun path(data: Any) = JSONEvaluationContext(JsonPath.parse(data, CONFIG)).context()
 
     @JvmStatic
-    fun path(data: LINK) = JSONEvaluationContext(JsonPath.parse(data, CONFIG)).context()
+    fun path(data: URI) = JSONEvaluationContext(JsonPath.parse(data.toInputStream(), CONFIG)).context()
+
+    @JvmStatic
+    fun path(data: URL) = JSONEvaluationContext(JsonPath.parse(data.toInputStream(), CONFIG)).context()
 
     @JvmStatic
     fun path(data: File) = JSONEvaluationContext(JsonPath.parse(data.toInputStream(), CONFIG)).context()

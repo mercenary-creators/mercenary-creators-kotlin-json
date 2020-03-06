@@ -19,5 +19,3 @@
 package co.mercenary.creators.kotlin.json
 
 typealias KotlinTest = co.mercenary.creators.kotlin.json.test.util.AbstractKotlinTest
-
-fun <T : Any> T.toJSONString(pretty: Boolean = true): String = toJSONString(this, pretty)

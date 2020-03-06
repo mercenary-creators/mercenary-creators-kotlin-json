@@ -17,8 +17,18 @@
 package co.mercenary.creators.kotlin.json.test.main
 
 import co.mercenary.creators.kotlin.json.base.JSONAware
-import co.mercenary.creators.kotlin.util.TimeDuration
+import co.mercenary.creators.kotlin.util.*
+import com.fasterxml.jackson.annotation.JsonIgnore
 
-data class MainData(val time: TimeDuration, val list: Sequence<Int>) : JSONAware {
+class MainData(val time: TimeDuration, val list: Sequence<Int>) : JSONAware {
+
+    @JsonIgnore
+    val look = false
+
+    @IgnoreForSerialize
+    val name = CREATORS_AUTHOR_INFO
+
+    val data = TestData(CREATORS_AUTHOR_INFO)
+
     override fun toString() = toJSONString()
 }

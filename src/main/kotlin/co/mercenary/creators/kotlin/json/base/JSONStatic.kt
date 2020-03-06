@@ -16,12 +16,12 @@
 
 package co.mercenary.creators.kotlin.json.base
 
-import co.mercenary.creators.kotlin.json.LINK
 import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
 import com.fasterxml.jackson.core.type.TypeReference
 import java.io.*
 import java.math.*
+import java.net.*
 import java.nio.channels.ReadableByteChannel
 import java.nio.file.Path
 import java.util.*
@@ -76,7 +76,7 @@ object JSONStatic {
     @JvmStatic
     fun isFunction(look: Any?) = when (look) {
         null -> false
-        is KCallable<*> -> true
+        is Function0<*> -> true
         else -> false
     }
 
@@ -116,6 +116,7 @@ object JSONStatic {
     fun isBoolean(look: Any?) = when (look) {
         null -> false
         is Boolean -> true
+        is AtomicBoolean -> true
         else -> false
     }
 
@@ -288,10 +289,17 @@ object JSONStatic {
 
     @JvmStatic
     @JvmOverloads
+    fun toJSONString(data: () -> Any, pretty: Boolean = true) = mapperOf(pretty).toJSONString(data.invoke())
+
+    @JvmStatic
+    @JvmOverloads
     fun <T : JSONAware> toJSONString(data: T, pretty: Boolean = true) = mapperOf(pretty).toJSONString(data)
 
     @JvmStatic
-    fun toJSONArray(data: LINK) = jsonRead(data, JSONArray::class.java)
+    fun toJSONArray(data: URI) = jsonRead(data, JSONArray::class.java)
+
+    @JvmStatic
+    fun toJSONArray(data: URL) = jsonRead(data, JSONArray::class.java)
 
     @JvmStatic
     fun toJSONArray(data: File) = jsonRead(data, JSONArray::class.java)
@@ -317,7 +325,10 @@ object JSONStatic {
     fun toJSONArray(data: InputStream, done: Boolean = true) = jsonRead(data, JSONArray::class.java, done)
 
     @JvmStatic
-    fun toJSONObject(data: LINK) = jsonRead(data, JSONObject::class.java)
+    fun toJSONObject(data: URI) = jsonRead(data, JSONObject::class.java)
+
+    @JvmStatic
+    fun toJSONObject(data: URL) = jsonRead(data, JSONObject::class.java)
 
     @JvmStatic
     fun toJSONObject(data: File) = jsonRead(data, JSONObject::class.java)
@@ -346,7 +357,10 @@ object JSONStatic {
     fun asJSONObject(vararg args: Pair<String, Any?>) = JSONObject(*args)
 
     @JvmStatic
-    fun <T : Any> jsonRead(data: LINK, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
+    fun <T : Any> jsonRead(data: URI, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonRead(data: URL, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
     fun <T : Any> jsonRead(data: File, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
@@ -375,7 +389,10 @@ object JSONStatic {
     fun <T : Any> jsonRead(data: InputStream, type: TypeReference<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
 
     @JvmStatic
-    fun <T : Any> jsonRead(data: LINK, type: Class<T>) = NORMAL.jsonRead(data, type)
+    fun <T : Any> jsonRead(data: URI, type: Class<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonRead(data: URL, type: Class<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
     fun <T : Any> jsonRead(data: File, type: Class<T>) = NORMAL.jsonRead(data, type)
@@ -404,7 +421,10 @@ object JSONStatic {
     fun <T : Any> jsonRead(data: InputStream, type: Class<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
 
     @JvmStatic
-    fun <T : Any> jsonRead(data: LINK, type: KClass<T>) = NORMAL.jsonRead(data, type)
+    fun <T : Any> jsonRead(data: URI, type: KClass<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonRead(data: URL, type: KClass<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
     fun <T : Any> jsonRead(data: File, type: KClass<T>) = NORMAL.jsonRead(data, type)

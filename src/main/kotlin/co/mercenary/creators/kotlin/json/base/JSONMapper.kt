@@ -16,10 +16,10 @@
 
 package co.mercenary.creators.kotlin.json.base
 
-import co.mercenary.creators.kotlin.json.LINK
 import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
 import co.mercenary.creators.kotlin.util.time.TimeAndDate
+import com.fasterxml.jackson.annotation.JsonIgnoreType
 import com.fasterxml.jackson.core.JsonGenerator.Feature.*
 import com.fasterxml.jackson.core.JsonParser.Feature.*
 import com.fasterxml.jackson.core.json.JsonWriteFeature.ESCAPE_NON_ASCII
@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PRO
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT
 import java.io.*
+import java.net.*
 import java.nio.channels.ReadableByteChannel
 import java.nio.file.Path
 import kotlin.reflect.KClass
@@ -48,13 +49,26 @@ open class JSONMapper : ObjectMapper {
 
     override fun copy() = JSONMapper(this)
 
-    override fun canSerialize(type: Class<*>?) = if (null == type) false else super.canSerialize(type)
+    override fun canSerialize(type: Class<*>?): Boolean {
+        return when {
+            type == null -> false
+            type.isAnnotationPresent(JsonIgnoreType::class.java) -> {
+                type.getAnnotation(JsonIgnoreType::class.java).value.not()
+            }
+            type.isAnnotationPresent(IgnoreForSerialize::class.java) -> {
+                type.getAnnotation(IgnoreForSerialize::class.java).value.not()
+            }
+            else -> super.canSerialize(type)
+        }
+    }
 
     private fun pretty(pretty: Boolean): ObjectMapper = if (pretty) setDefaultPrettyPrinter(TO_PRETTY_PRINTS).enable(INDENT_OUTPUT) else disable(INDENT_OUTPUT)
 
     fun canSerializeClass(type: Class<*>?) = canSerialize(type)
 
-    fun canSerializeValue(value: Any?) = if (null == value) false else canSerialize(value.javaClass)
+    fun canSerializeClass(type: KClass<*>?) = if (null == type) false else canSerializeClass(type.java)
+
+    fun canSerializeValue(value: Any?) = if (null == value) false else canSerializeClass(value.javaClass)
 
     fun toByteArray(data: Any): ByteArray = writeValueAsBytes(data)
 
@@ -74,7 +88,9 @@ open class JSONMapper : ObjectMapper {
 
     fun <T : Any> toDeepCopy(value: T, type: TypeReference<T>): T = readerFor(type).readValue(writeValueAsBytes(value))
 
-    fun <T : Any> jsonRead(value: LINK, type: TypeReference<T>): T = readerFor(type).readValue(value)
+    fun <T : Any> jsonRead(value: URI, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
+
+    fun <T : Any> jsonRead(value: URL, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
     fun <T : Any> jsonRead(value: String, type: TypeReference<T>): T = readerFor(type).readValue(value)
 
@@ -94,7 +110,9 @@ open class JSONMapper : ObjectMapper {
     @JvmOverloads
     fun <T : Any> jsonRead(value: InputStream, type: TypeReference<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
-    fun <T : Any> jsonRead(value: LINK, type: Class<T>): T = readerFor(type).readValue(value)
+    fun <T : Any> jsonRead(value: URI, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
+
+    fun <T : Any> jsonRead(value: URL, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
     fun <T : Any> jsonRead(value: String, type: Class<T>): T = readerFor(type).readValue(value)
 
@@ -114,7 +132,9 @@ open class JSONMapper : ObjectMapper {
     @JvmOverloads
     fun <T : Any> jsonRead(value: InputStream, type: Class<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
-    fun <T : Any> jsonRead(value: LINK, type: KClass<T>): T = readerFor(type.java).readValue(value)
+    fun <T : Any> jsonRead(value: URI, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue(it) }
+
+    fun <T : Any> jsonRead(value: URL, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue(it) }
 
     fun <T : Any> jsonRead(value: String, type: KClass<T>): T = readerFor(type.java).readValue(value)
 

@@ -20,7 +20,7 @@ class JSONObject : LinkedHashMap<String, Any?>, JSONBase<String, JSONObject> {
 
     constructor() : super()
 
-    constructor(args: Map<String, Any?>) : super(args)
+    constructor(args: Map<String, Any?>) : super(args.toMap())
 
     constructor(k: String, v: Any?) {
         put(k, v)

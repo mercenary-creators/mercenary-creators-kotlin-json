@@ -16,9 +16,7 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-import co.mercenary.creators.kotlin.json.base.JSONAware
-
-data class TypicodePostData(val userId: Int, val id: Int, val title: String, val body: String) : JSONAware {
+data class TypicodePostData(val userId: Int, val id: Int, val title: String, val body: String) : Typicode {
 
     override fun toString() = toJSONString()
 
