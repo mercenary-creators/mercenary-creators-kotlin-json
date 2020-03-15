@@ -16,9 +16,6 @@
 
 package co.mercenary.creators.kotlin.json.test.util
 
-import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.test.AbstractKotlinTestBase
 
-abstract class AbstractKotlinTest @JvmOverloads constructor(protected val author: String = CREATORS_AUTHOR_INFO) : AbstractKotlinTestBase() {
-    protected val loader = CACHED_CONTENT_RESOURCE_LOADER
-}
+abstract class AbstractKotlinTest : AbstractKotlinTestBase()
