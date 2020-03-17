@@ -20,6 +20,6 @@ import com.fasterxml.jackson.core.*
 import com.fasterxml.jackson.core.util.VersionUtil
 
 object PackageVersion : Versioned {
-    private val version = VersionUtil.parseVersion("9.6.2-SNAPSHOT", "co.mercenary-creators", "mercenary-creators-kotlin-json")
+    private val version = VersionUtil.parseVersion("9.6.3-SNAPSHOT", "co.mercenary-creators", "mercenary-creators-kotlin-json")
     override fun version(): Version = version
 }
