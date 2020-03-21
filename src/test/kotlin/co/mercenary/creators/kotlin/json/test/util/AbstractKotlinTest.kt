@@ -16,6 +16,6 @@
 
 package co.mercenary.creators.kotlin.json.test.util
 
-import co.mercenary.creators.kotlin.util.test.AbstractKotlinTestBase
+import co.mercenary.creators.kotlin.util.test.KotlinTestBase
 
-abstract class AbstractKotlinTest : AbstractKotlinTestBase()
+abstract class AbstractKotlinTest : KotlinTestBase()
