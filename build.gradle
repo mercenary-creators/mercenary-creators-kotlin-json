@@ -16,8 +16,8 @@
 
 buildscript {
     ext {
-        set('kotlinVersion', '1.3.70')
-        set('MERCENARY_CREATORS_UTIL_VERSION', '9.6.5-SNAPSHOT')
+        set('kotlinVersion', '1.3.71')
+        set('MERCENARY_CREATORS_UTIL_VERSION', '9.6.8-SNAPSHOT')
         set('JACKSON_DATA_BIND_VERSION', '2.10.3')
     }
     repositories {
@@ -44,7 +44,7 @@ targetCompatibility = 1.8
 
 group = 'co.mercenary-creators'
 
-version = '9.6.5-SNAPSHOT'
+version = '9.6.8-SNAPSHOT'
 
 task doJavaDocs(type: Javadoc) {
     source = sourceSets.main.allJava

@@ -16,6 +16,8 @@
 
 package co.mercenary.creators.kotlin.json.base
 
+import co.mercenary.creators.kotlin.util.*
+
 class JSONArray : ArrayList<Any?>, JSONBase<Int, JSONArray> {
 
     constructor() : super()
@@ -34,10 +36,13 @@ class JSONArray : ArrayList<Any?>, JSONBase<Int, JSONArray> {
 
     override fun copyOf() = JSONStatic.toDeepCopy(this, JSONArray::class)
 
-    override fun isDefined(look: Int) = look in 0 until size
-
+    @IgnoreForSerialize
     override fun finderOf() = this::get
 
+    @AssumptionDsl
+    override infix fun isDefined(look: Int) = look in 0 until size
+
+    @AssumptionDsl
     override fun equals(other: Any?) = when (other) {
         is JSONArray -> this === other || size == other.size && super.equals(other)
         else -> false

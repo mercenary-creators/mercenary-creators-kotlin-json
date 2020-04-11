@@ -36,6 +36,7 @@ class MainTest : KotlinTest() {
         val back = buff.jsonReadOf<MainData>()
         info { back }
         warn { this }
-        warn { here() }
+        error { here() }
+        info { this }
     }
 }

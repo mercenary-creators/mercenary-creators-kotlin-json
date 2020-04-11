@@ -17,7 +17,7 @@
 package co.mercenary.creators.kotlin.json.text
 
 import co.mercenary.creators.kotlin.json.base.*
-import co.mercenary.creators.kotlin.util.HasMapNames
+import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.text.StringFormatterService
 import java.time.LocalDateTime
 import java.util.*
@@ -33,6 +33,7 @@ class JSONStringFormatterService : StringFormatterService(1) {
         return json.toJSONString(data)
     }
 
+    @AssumptionDsl
     override fun isValidClass(data: Any): Boolean {
         return when (data) {
             is String -> false

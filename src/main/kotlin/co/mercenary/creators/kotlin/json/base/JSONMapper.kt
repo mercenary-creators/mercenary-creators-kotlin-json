@@ -49,6 +49,7 @@ open class JSONMapper : ObjectMapper {
 
     override fun copy() = JSONMapper(this)
 
+    @AssumptionDsl
     override fun canSerialize(type: Class<*>?): Boolean {
         return when {
             type == null -> false
@@ -64,10 +65,13 @@ open class JSONMapper : ObjectMapper {
 
     private fun pretty(pretty: Boolean): ObjectMapper = if (pretty) setDefaultPrettyPrinter(TO_PRETTY_PRINTS).enable(INDENT_OUTPUT) else disable(INDENT_OUTPUT)
 
+    @AssumptionDsl
     fun canSerializeClass(type: Class<*>?) = canSerialize(type)
 
+    @AssumptionDsl
     fun canSerializeClass(type: KClass<*>?) = if (null == type) false else canSerializeClass(type.java)
 
+    @AssumptionDsl
     fun canSerializeValue(value: Any?) = if (null == value) false else canSerializeClass(value.javaClass)
 
     fun toByteArray(data: Any): ByteArray = writeValueAsBytes(data)

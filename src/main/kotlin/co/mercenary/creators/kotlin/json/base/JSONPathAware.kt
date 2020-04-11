@@ -19,5 +19,5 @@ package co.mercenary.creators.kotlin.json.base
 import co.mercenary.creators.kotlin.json.path.*
 
 interface JSONPathAware {
-    fun path(): EvaluationContext = JSONPath.path(this)
+    fun pathOf(): EvaluationContext = JSONPath.path(this)
 }

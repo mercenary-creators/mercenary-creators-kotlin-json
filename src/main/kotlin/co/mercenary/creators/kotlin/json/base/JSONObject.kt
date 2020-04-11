@@ -16,6 +16,8 @@
 
 package co.mercenary.creators.kotlin.json.base
 
+import co.mercenary.creators.kotlin.util.*
+
 class JSONObject : LinkedHashMap<String, Any?>, JSONBase<String, JSONObject> {
 
     constructor() : super()
@@ -50,10 +52,13 @@ class JSONObject : LinkedHashMap<String, Any?>, JSONBase<String, JSONObject> {
 
     override fun copyOf() = JSONStatic.toDeepCopy(this, JSONObject::class)
 
-    override fun isDefined(look: String) = look in keys
+    @AssumptionDsl
+    override infix fun isDefined(look: String) = look in keys
 
+    @IgnoreForSerialize
     override fun finderOf() = this::get
 
+    @AssumptionDsl
     override fun equals(other: Any?) = when (other) {
         is JSONObject -> this === other || size == other.size && super.equals(other)
         else -> false

@@ -74,6 +74,7 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @AssumptionDsl
     fun isFunction(look: Any?) = when (look) {
         null -> false
         is Function0<*> -> true
@@ -81,6 +82,7 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @AssumptionDsl
     fun isArray(look: Any?) = when (look) {
         null -> false
         is List<*> -> true
@@ -91,6 +93,7 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @AssumptionDsl
     fun isObject(look: Any?) = when (look) {
         null -> false
         is Map<*, *> -> true
@@ -100,19 +103,23 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @AssumptionDsl
     fun isDataClass(look: Any?) = when (look) {
         null -> false
         else -> look.javaClass.kotlin.isData
     }
 
     @JvmStatic
+    @AssumptionDsl
     fun isString(look: Any?) = when (look) {
         null -> false
         is String -> true
+        is CharSequence -> true
         else -> false
     }
 
     @JvmStatic
+    @AssumptionDsl
     fun isBoolean(look: Any?) = when (look) {
         null -> false
         is Boolean -> true
@@ -121,6 +128,7 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @AssumptionDsl
     fun isNumber(look: Any?) = when (look) {
         null -> false
         is Number -> isDouble(look)
@@ -128,6 +136,7 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @AssumptionDsl
     fun isDate(look: Any?) = when (look) {
         null -> false
         is Date -> true
@@ -135,12 +144,14 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @AssumptionDsl
     fun isNull(look: Any?) = when (look) {
         null -> true
         else -> false
     }
 
     @JvmStatic
+    @AssumptionDsl
     fun isLong(look: Any?) = when (look) {
         null -> false
         is Long, Int, Short, Char, Byte -> true
@@ -149,6 +160,7 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @AssumptionDsl
     fun isInteger(look: Any?) = when (look) {
         null -> false
         is Int, Short, Char, Byte -> true
@@ -158,6 +170,7 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @AssumptionDsl
     fun isDouble(look: Any?) = when (look) {
         null -> false
         is Float -> look.isFinite()
@@ -193,15 +206,8 @@ object JSONStatic {
     fun asString(look: Any?): String? = when (look) {
         null -> null
         is String -> look
-        else -> {
-            try {
-                look.toString()
-            }
-            catch (cause: Throwable) {
-                Throwables.thrown(cause)
-                null
-            }
-        }
+        is CharSequence -> look.toString()
+        else -> null
     }
 
     @JvmStatic
@@ -223,7 +229,6 @@ object JSONStatic {
     fun asObject(look: Any?): JSONObject? = when (look) {
         null -> null
         is JSONObject -> look
-        is JSONObjectProvider -> look.toJSONObject()
         else -> asDataTypeOf(look, JSONObject::class)
     }
 
@@ -278,10 +283,16 @@ object JSONStatic {
     fun toByteArray(data: Any) = NORMAL.toByteArray(data)
 
     @JvmStatic
+    @AssumptionDsl
     fun canSerializeValue(data: Any?) = NORMAL.canSerializeValue(data)
 
     @JvmStatic
+    @AssumptionDsl
     fun canSerializeClass(type: Class<*>?) = NORMAL.canSerializeClass(type)
+
+    @JvmStatic
+    @AssumptionDsl
+    fun canSerializeClass(type: KClass<*>?) = NORMAL.canSerializeClass(type)
 
     @JvmStatic
     @JvmOverloads
@@ -296,161 +307,158 @@ object JSONStatic {
     fun <T : JSONAware> toJSONString(data: T, pretty: Boolean = true) = mapperOf(pretty).toJSONString(data)
 
     @JvmStatic
-    fun toJSONArray(data: URI) = jsonRead(data, JSONArray::class.java)
+    fun toJSONArray(data: URI) = jsonReadOf(data, JSONArray::class.java)
 
     @JvmStatic
-    fun toJSONArray(data: URL) = jsonRead(data, JSONArray::class.java)
+    fun toJSONArray(data: URL) = jsonReadOf(data, JSONArray::class.java)
 
     @JvmStatic
-    fun toJSONArray(data: File) = jsonRead(data, JSONArray::class.java)
+    fun toJSONArray(data: File) = jsonReadOf(data, JSONArray::class.java)
 
     @JvmStatic
-    fun toJSONArray(data: Path) = jsonRead(data, JSONArray::class.java)
+    fun toJSONArray(data: Path) = jsonReadOf(data, JSONArray::class.java)
 
     @JvmStatic
-    fun toJSONArray(data: String) = jsonRead(data, JSONArray::class.java)
+    fun toJSONArray(data: String) = jsonReadOf(data, JSONArray::class.java)
 
     @JvmStatic
-    fun toJSONArray(data: ByteArray) = jsonRead(data, JSONArray::class.java)
+    fun toJSONArray(data: ByteArray) = jsonReadOf(data, JSONArray::class.java)
 
     @JvmStatic
-    fun toJSONArray(data: InputStreamSupplier) = jsonRead(data, JSONArray::class.java)
-
-    @JvmStatic
-    @JvmOverloads
-    fun toJSONArray(data: Reader, done: Boolean = true) = jsonRead(data, JSONArray::class.java, done)
+    fun toJSONArray(data: InputStreamSupplier) = jsonReadOf(data, JSONArray::class.java)
 
     @JvmStatic
     @JvmOverloads
-    fun toJSONArray(data: InputStream, done: Boolean = true) = jsonRead(data, JSONArray::class.java, done)
-
-    @JvmStatic
-    fun toJSONObject(data: URI) = jsonRead(data, JSONObject::class.java)
-
-    @JvmStatic
-    fun toJSONObject(data: URL) = jsonRead(data, JSONObject::class.java)
-
-    @JvmStatic
-    fun toJSONObject(data: File) = jsonRead(data, JSONObject::class.java)
-
-    @JvmStatic
-    fun toJSONObject(data: Path) = jsonRead(data, JSONObject::class.java)
-
-    @JvmStatic
-    fun toJSONObject(data: String) = jsonRead(data, JSONObject::class.java)
-
-    @JvmStatic
-    fun toJSONObject(data: InputStreamSupplier) = jsonRead(data, JSONObject::class.java)
-
-    @JvmStatic
-    fun toJSONObject(data: ByteArray) = jsonRead(data, JSONObject::class.java)
+    fun toJSONArray(data: Reader, done: Boolean = true) = jsonReadOf(data, JSONArray::class.java, done)
 
     @JvmStatic
     @JvmOverloads
-    fun toJSONObject(data: Reader, done: Boolean = true) = jsonRead(data, JSONObject::class.java, done)
+    fun toJSONArray(data: InputStream, done: Boolean = true) = jsonReadOf(data, JSONArray::class.java, done)
+
+    @JvmStatic
+    fun toJSONObject(data: URI) = jsonReadOf(data, JSONObject::class.java)
+
+    @JvmStatic
+    fun toJSONObject(data: URL) = jsonReadOf(data, JSONObject::class.java)
+
+    @JvmStatic
+    fun toJSONObject(data: File) = jsonReadOf(data, JSONObject::class.java)
+
+    @JvmStatic
+    fun toJSONObject(data: Path) = jsonReadOf(data, JSONObject::class.java)
+
+    @JvmStatic
+    fun toJSONObject(data: String) = jsonReadOf(data, JSONObject::class.java)
+
+    @JvmStatic
+    fun toJSONObject(data: InputStreamSupplier) = jsonReadOf(data, JSONObject::class.java)
+
+    @JvmStatic
+    fun toJSONObject(data: ByteArray) = jsonReadOf(data, JSONObject::class.java)
 
     @JvmStatic
     @JvmOverloads
-    fun toJSONObject(data: InputStream, done: Boolean = true) = jsonRead(data, JSONObject::class.java, done)
-
-    @JvmStatic
-    fun asJSONObject(vararg args: Pair<String, Any?>) = JSONObject(*args)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: URI, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: URL, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: File, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: Path, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: String, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: ByteArray, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: InputStreamSupplier, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: ReadableByteChannel, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
+    fun toJSONObject(data: Reader, done: Boolean = true) = jsonReadOf(data, JSONObject::class.java, done)
 
     @JvmStatic
     @JvmOverloads
-    fun <T : Any> jsonRead(data: Reader, type: TypeReference<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
+    fun toJSONObject(data: InputStream, done: Boolean = true) = jsonReadOf(data, JSONObject::class.java, done)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: URI, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: URL, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: File, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: Path, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: String, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: ByteArray, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: InputStreamSupplier, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: ReadableByteChannel, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
     @JvmOverloads
-    fun <T : Any> jsonRead(data: InputStream, type: TypeReference<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: URI, type: Class<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: URL, type: Class<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: File, type: Class<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: Path, type: Class<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: String, type: Class<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: ByteArray, type: Class<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: InputStreamSupplier, type: Class<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: ReadableByteChannel, type: Class<T>) = NORMAL.jsonRead(data, type)
+    fun <T : Any> jsonReadOf(data: Reader, type: TypeReference<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
 
     @JvmStatic
     @JvmOverloads
-    fun <T : Any> jsonRead(data: Reader, type: Class<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
+    fun <T : Any> jsonReadOf(data: InputStream, type: TypeReference<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: URI, type: Class<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: URL, type: Class<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: File, type: Class<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: Path, type: Class<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: String, type: Class<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: ByteArray, type: Class<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: InputStreamSupplier, type: Class<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: ReadableByteChannel, type: Class<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
     @JvmOverloads
-    fun <T : Any> jsonRead(data: InputStream, type: Class<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: URI, type: KClass<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: URL, type: KClass<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: File, type: KClass<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: Path, type: KClass<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: String, type: KClass<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: ByteArray, type: KClass<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: InputStreamSupplier, type: KClass<T>) = NORMAL.jsonRead(data, type)
-
-    @JvmStatic
-    fun <T : Any> jsonRead(data: ReadableByteChannel, type: KClass<T>) = NORMAL.jsonRead(data, type)
+    fun <T : Any> jsonReadOf(data: Reader, type: Class<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
 
     @JvmStatic
     @JvmOverloads
-    fun <T : Any> jsonRead(data: Reader, type: KClass<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
+    fun <T : Any> jsonReadOf(data: InputStream, type: Class<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: URI, type: KClass<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: URL, type: KClass<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: File, type: KClass<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: Path, type: KClass<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: String, type: KClass<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: ByteArray, type: KClass<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: InputStreamSupplier, type: KClass<T>) = NORMAL.jsonRead(data, type)
+
+    @JvmStatic
+    fun <T : Any> jsonReadOf(data: ReadableByteChannel, type: KClass<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
     @JvmOverloads
-    fun <T : Any> jsonRead(data: InputStream, type: KClass<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
+    fun <T : Any> jsonReadOf(data: Reader, type: KClass<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
+
+    @JvmStatic
+    @JvmOverloads
+    fun <T : Any> jsonReadOf(data: InputStream, type: KClass<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
 
     @JvmStatic
     fun <T> toDeepCopy(data: T) = NORMAL.toDeepCopy(data)
@@ -472,12 +480,6 @@ object JSONStatic {
 
     @JvmStatic
     fun <T : Any> toDataType(data: Any, type: TypeReference<T>) = NORMAL.toDataType(data, type)
-
-    @JvmStatic
-    fun <T> toJavaClass(data: T, type: Class<T>): Class<T> = if (type.isInstance(data)) type else type
-
-    @JvmStatic
-    fun <T : Any> cast(data: Any, type: Class<T>): T? = if (type.isInstance(data)) type.cast(data) else NORMAL.toDataType(data, type)
 
     private fun mapperOf(pretty: Boolean = true) = if (pretty) PRETTY else NORMAL
 }
