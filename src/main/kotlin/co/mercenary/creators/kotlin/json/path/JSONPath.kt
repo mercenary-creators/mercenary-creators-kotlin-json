@@ -25,12 +25,14 @@ import com.jayway.jsonpath.spi.json.JacksonJsonProvider
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider
 import java.io.*
 import java.net.*
+import java.nio.channels.ReadableByteChannel
 import java.nio.file.Path
 import kotlin.reflect.KClass
 
+@IgnoreForSerialize
 object JSONPath {
 
-    private val CACHED = AtomicHashMap<String, JSONCompiledPath>()
+    private val CACHED = atomicMapOf<String, JSONCompiledPath>()
 
     private val MAPPER: JSONMapper by lazy {
         JSONMapper(false)
@@ -40,40 +42,43 @@ object JSONPath {
         Configuration.builder().jsonProvider(JSONJacksonProvider(MAPPER)).mappingProvider(JSONJacksonMappingProvider(MAPPER)).options(SUPPRESS_EXCEPTIONS).build()
     }
 
+    @JvmStatic
+    @CreatorsDsl
     private fun lookup(path: String) = cached(path).compiled
 
+    @JvmStatic
+    @CreatorsDsl
     private fun lookup(path: CompiledPath) = lookup(path.toPathSpec())
 
+    @JvmStatic
+    @CreatorsDsl
     private fun cached(path: String) = CACHED.computeIfAbsent(path) { JSONCompiledPath(it) }
 
     @JvmStatic
-    fun path(data: Any) = JSONEvaluationContext(JsonPath.parse(data, CONFIG)).context()
+    @CreatorsDsl
+    private fun make(data: Any): EvaluationContext {
+        return when (data) {
+            is URI -> JSONEvaluationContext(data.toInputStream())
+            is URL -> JSONEvaluationContext(data.toInputStream())
+            is File -> JSONEvaluationContext(data.toInputStream())
+            is Path -> JSONEvaluationContext(data.toInputStream())
+            is Reader-> JSONEvaluationContext(data.toInputStream())
+            is ByteArray -> JSONEvaluationContext(data.toInputStream())
+            is InputStreamSupplier -> JSONEvaluationContext(data.toInputStream())
+            is ReadableByteChannel -> JSONEvaluationContext(data.toInputStream())
+            is InputStream -> JSONEvaluationContext(data)
+            is CharSequence -> JSONEvaluationContext(data)
+            is DocumentContext -> JSONEvaluationContext(data)
+            else -> JSONEvaluationContext(data)
+        }
+    }
 
     @JvmStatic
-    fun path(data: URI) = JSONEvaluationContext(JsonPath.parse(data.toInputStream(), CONFIG)).context()
+    @CreatorsDsl
+    fun path(data: Any) = make(data)
 
     @JvmStatic
-    fun path(data: URL) = JSONEvaluationContext(JsonPath.parse(data.toInputStream(), CONFIG)).context()
-
-    @JvmStatic
-    fun path(data: File) = JSONEvaluationContext(JsonPath.parse(data.toInputStream(), CONFIG)).context()
-
-    @JvmStatic
-    fun path(data: Path) = JSONEvaluationContext(JsonPath.parse(data.toInputStream(), CONFIG)).context()
-
-    @JvmStatic
-    fun path(data: String) = JSONEvaluationContext(JsonPath.parse(data, CONFIG)).context()
-
-    @JvmStatic
-    fun path(data: ByteArray) = JSONEvaluationContext(JsonPath.parse(data.toInputStream(), CONFIG)).context()
-
-    @JvmStatic
-    fun path(data: InputStream) = JSONEvaluationContext(JsonPath.parse(data, CONFIG)).context()
-
-    @JvmStatic
-    fun path(data: InputStreamSupplier) = JSONEvaluationContext(JsonPath.parse(data.toInputStream(), CONFIG)).context()
-
-    @JvmStatic
+    @CreatorsDsl
     fun compile(path: String): CompiledPath = cached(path)
 
     internal class JSONJacksonMappingProvider(mapper: JSONMapper) : JacksonMappingProvider(mapper)
@@ -84,6 +89,7 @@ object JSONPath {
     }
 
     internal class JSONCompiledPath(internal val compiled: JsonPath) : CompiledPath {
+
         constructor(path: String) : this(JsonPath.compile(path))
 
         override fun toString(): String = toPathSpec()
@@ -91,19 +97,28 @@ object JSONPath {
         override fun isDefinite(): Boolean = compiled.isDefinite
     }
 
-    internal class JSONEvaluationContext(internal val context: DocumentContext) : EvaluationContext {
-        internal fun context(): EvaluationContext = this
-        override fun deep() = path(json() as Any)
-        override fun add(path: String, data: Any) = JSONEvaluationContext(context.add(lookup(path), data)).context()
-        override fun add(path: CompiledPath, data: Any) = JSONEvaluationContext(context.add(lookup(path), data)).context()
-        override fun set(path: String, data: Any) = JSONEvaluationContext(context.set(lookup(path), data)).context()
-        override fun set(path: CompiledPath, data: Any) = JSONEvaluationContext(context.set(lookup(path), data)).context()
-        override fun put(path: String, name: String, data: Any) = JSONEvaluationContext(context.put(lookup(path), name, data)).context()
-        override fun put(path: CompiledPath, name: String, data: Any) = JSONEvaluationContext(context.put(lookup(path), name, data)).context()
-        override fun delete(path: String) = JSONEvaluationContext(context.delete(lookup(path))).context()
-        override fun delete(path: CompiledPath) = JSONEvaluationContext(context.delete(lookup(path))).context()
-        override fun rename(path: String, last: String, name: String) = JSONEvaluationContext(context.renameKey(lookup(path), last, name)).context()
-        override fun rename(path: CompiledPath, last: String, name: String) = JSONEvaluationContext(context.renameKey(lookup(path), last, name)).context()
+    internal class JSONEvaluationContext @CreatorsDsl constructor(internal val context: DocumentContext) : EvaluationContext {
+
+        @CreatorsDsl
+        constructor(data: Any) : this(JsonPath.parse(data, CONFIG))
+
+        @CreatorsDsl
+        constructor(data: InputStream) : this(JsonPath.parse(data, CONFIG))
+
+        @CreatorsDsl
+        constructor(data: CharSequence) : this(JsonPath.parse(data.toString(), CONFIG))
+
+        override fun deep() = make(json() as Any)
+        override fun add(path: String, data: Any) = make(context.add(lookup(path), data))
+        override fun add(path: CompiledPath, data: Any) = make(context.add(lookup(path), data))
+        override fun set(path: String, data: Any) = make(context.set(lookup(path), data))
+        override fun set(path: CompiledPath, data: Any) = make(context.set(lookup(path), data))
+        override fun put(path: String, name: String, data: Any) = make(context.put(lookup(path), name, data))
+        override fun put(path: CompiledPath, name: String, data: Any) = make(context.put(lookup(path), name, data))
+        override fun delete(path: String) = make(context.delete(lookup(path)))
+        override fun delete(path: CompiledPath) = make(context.delete(lookup(path)))
+        override fun rename(path: String, last: String, name: String) = make(context.renameKey(lookup(path), last, name))
+        override fun rename(path: CompiledPath, last: String, name: String) = make(context.renameKey(lookup(path), last, name))
         override fun <T : Any> eval(path: String, type: Class<T>): T = context.read(lookup(path), type)
         override fun <T : Any> eval(path: String, type: TypeRef<T>): T = context.read(lookup(path), type)
         override fun <T : Any> eval(path: String, type: KClass<T>): T = context.read(lookup(path), type.java)
@@ -116,12 +131,14 @@ object JSONPath {
         override fun <T : Any> read(path: CompiledPath, type: Class<T>): T? = context.read(lookup(path), type)
         override fun <T : Any> read(path: CompiledPath, type: TypeRef<T>): T? = context.read(lookup(path), type)
         override fun <T : Any> read(path: CompiledPath, type: KClass<T>): T? = context.read(lookup(path), type.java)
-        override fun map(path: String, func: (Any, EvaluationContext) -> Any) = JSONEvaluationContext(context.map(lookup(path), mapper(func, context()))).context()
-        override fun map(path: CompiledPath, func: (Any, EvaluationContext) -> Any) = JSONEvaluationContext(context.map(lookup(path), mapper(func, context()))).context()
+        override fun map(path: String, func: (Any, EvaluationContext) -> Any) = make(context.map(lookup(path), mapper(func, this)))
+        override fun map(path: CompiledPath, func: (Any, EvaluationContext) -> Any) = make(context.map(lookup(path), mapper(func, this)))
         override fun <T : Any> json(): T = context.json()
 
         companion object {
+
             @JvmStatic
+            @CreatorsDsl
             private fun mapper(mapper: (Any, EvaluationContext) -> Any, context: EvaluationContext) = { data: Any, _: Configuration -> mapper(data, context) } as MapFunction
         }
     }

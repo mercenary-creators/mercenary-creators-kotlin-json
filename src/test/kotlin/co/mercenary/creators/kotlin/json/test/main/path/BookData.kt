@@ -16,7 +16,7 @@
 
 package co.mercenary.creators.kotlin.json.test.main.path
 
-import co.mercenary.creators.kotlin.json.base.JSONAware
+import co.mercenary.creators.kotlin.json.JSONAware
 import com.fasterxml.jackson.annotation.*
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

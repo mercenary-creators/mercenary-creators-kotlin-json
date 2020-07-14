@@ -16,11 +16,13 @@
 
 package co.mercenary.creators.kotlin.json.module
 
-import co.mercenary.creators.kotlin.util.time.TimeDuration
+import co.mercenary.creators.kotlin.util.*
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
+@CreatorsDsl
+@IgnoreForSerialize
 object TimeDurationSerializer : StdSerializer<TimeDuration>(TimeDuration::class.java) {
     override fun serialize(value: TimeDuration, generator: JsonGenerator, provider: SerializerProvider) = provider.defaultSerializeValue(value.toString(), generator)
 }

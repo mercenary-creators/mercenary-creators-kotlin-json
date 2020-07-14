@@ -16,6 +16,8 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
+import co.mercenary.creators.kotlin.util.*
+
 data class TypicodeCommentData(val postId: Int, val id: Int, val name: String, val email: String, val body: String) : Typicode {
 
     override fun toString() = toJSONString()
@@ -23,9 +25,13 @@ data class TypicodeCommentData(val postId: Int, val id: Int, val name: String, v
     companion object {
 
         @JvmStatic
+        @CreatorsDsl
+        @IgnoreForSerialize
         fun size() = 500
 
         @JvmStatic
+        @CreatorsDsl
+        @IgnoreForSerialize
         fun path() = "http://jsonplaceholder.typicode.com/comments"
     }
 }

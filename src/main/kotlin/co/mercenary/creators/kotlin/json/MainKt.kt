@@ -18,8 +18,7 @@
 
 package co.mercenary.creators.kotlin.json
 
-import co.mercenary.creators.kotlin.json.base.*
-import co.mercenary.creators.kotlin.util.AssumptionDsl
+import co.mercenary.creators.kotlin.util.CreatorsDsl
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
 import com.fasterxml.jackson.core.type.TypeReference
 import com.jayway.jsonpath.TypeRef
@@ -27,13 +26,14 @@ import java.io.*
 import java.net.*
 import java.nio.channels.ReadableByteChannel
 import java.nio.file.Path
-import kotlin.reflect.KClass
 
 typealias json = co.mercenary.creators.kotlin.json.base.JSONObject
 
 typealias JSONArray = co.mercenary.creators.kotlin.json.base.JSONArray
 
 typealias JSONObject = co.mercenary.creators.kotlin.json.base.JSONObject
+
+typealias JSONStatic = co.mercenary.creators.kotlin.json.base.JSONStatic
 
 typealias JSONPath = co.mercenary.creators.kotlin.json.path.JSONPath
 
@@ -53,51 +53,48 @@ typealias TypicodeAlbumData = co.mercenary.creators.kotlin.json.util.typicode.Ty
 
 typealias TypicodeCommentData = co.mercenary.creators.kotlin.json.util.typicode.TypicodeCommentData
 
+@CreatorsDsl
 inline fun <reified T : Any> EvaluationContext.eval(path: String): T = eval(path, object : TypeRef<T>() {})
 
+@CreatorsDsl
 inline fun <reified T : Any> EvaluationContext.eval(path: CompiledPath): T = eval(path, object : TypeRef<T>() {})
 
+@CreatorsDsl
 inline fun <reified T : Any> EvaluationContext.read(path: String): T? = read(path, object : TypeRef<T>() {})
 
+@CreatorsDsl
 inline fun <reified T : Any> EvaluationContext.read(path: CompiledPath): T? = read(path, object : TypeRef<T>() {})
 
-fun <T : Any> T.toJSONPretty(): String = when (this) {
-    is JSONAware -> toJSONString(true)
-    else -> JSONStatic.toJSONString(this, true)
-}
+@CreatorsDsl
+inline fun <reified T : Any> typeReferenceOf(): TypeReference<T> = object : TypeReference<T>() {}
 
-@AssumptionDsl
-fun isJSONValue(data: Any?) = JSONStatic.canSerializeValue(data)
+@CreatorsDsl
+inline fun <reified T : Any> deepOf(data: T): T = JSONStatic.toDeepCopy(data, T::class.java)
 
-@AssumptionDsl
-fun isJSONClass(data: Class<*>?) = JSONStatic.canSerializeClass(data)
-
-@AssumptionDsl
-fun isJSONClass(data: KClass<*>?) = JSONStatic.canSerializeClass(data)
-
-inline fun <reified T : Any> toDeepCopy(data: T): T = JSONStatic.toDeepCopy(data, T::class.java)
-
-inline fun <reified T : Any, A> JSONAccess<A>.asDataTypeOf(look: A): T? = JSONStatic.asDataTypeOf(accessOf(look), object : TypeReference<T>() {})
-
-inline fun <reified T : Any> Any.toDataType(): T = JSONStatic.toDataType(this, object : TypeReference<T>() {})
-
-inline fun <reified T : Any> URI.jsonReadOf(): T = JSONStatic.jsonReadOf(this, object : TypeReference<T>() {})
-
-inline fun <reified T : Any> URL.jsonReadOf(): T = JSONStatic.jsonReadOf(this, object : TypeReference<T>() {})
-
-inline fun <reified T : Any> File.jsonReadOf(): T = JSONStatic.jsonReadOf(this, object : TypeReference<T>() {})
-
-inline fun <reified T : Any> Path.jsonReadOf(): T = JSONStatic.jsonReadOf(this, object : TypeReference<T>() {})
-
-inline fun <reified T : Any> String.jsonReadOf(): T = JSONStatic.jsonReadOf(this, object : TypeReference<T>() {})
-
-inline fun <reified T : Any> ByteArray.jsonReadOf(): T = JSONStatic.jsonReadOf(this, object : TypeReference<T>() {})
-
-inline fun <reified T : Any> InputStreamSupplier.jsonReadOf(): T = JSONStatic.jsonReadOf(this, object : TypeReference<T>() {})
-
-inline fun <reified T : Any> ReadableByteChannel.jsonReadOf(): T = JSONStatic.jsonReadOf(this, object : TypeReference<T>() {})
-
-inline fun <reified T : Any> Reader.jsonReadOf(done: Boolean = true): T = JSONStatic.jsonReadOf(this, object : TypeReference<T>() {}, done)
-
-inline fun <reified T : Any> InputStream.jsonReadOf(done: Boolean = true): T = JSONStatic.jsonReadOf(this, object : TypeReference<T>() {}, done)
+@CreatorsDsl
+inline fun <reified T : JSONAware> T.deepOf(): T = JSONStatic.toDeepCopy(this, T::class.java)
+@CreatorsDsl
+inline fun <reified T : Any, A> JSONAccess<A>.asDataTypeOf(look: A): T? = JSONStatic.asDataTypeOf(accessOf(look), typeReferenceOf())
+@CreatorsDsl
+inline fun <reified T : Any> Any.toDataType(): T = JSONStatic.toDataType(this, typeReferenceOf())
+@CreatorsDsl
+inline fun <reified T : Any> URI.readOf(): T = JSONStatic.jsonReadOf(this,typeReferenceOf())
+@CreatorsDsl
+inline fun <reified T : Any> URL.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+@CreatorsDsl
+inline fun <reified T : Any> File.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+@CreatorsDsl
+inline fun <reified T : Any> Path.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+@CreatorsDsl
+inline fun <reified T : Any> String.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+@CreatorsDsl
+inline fun <reified T : Any> ByteArray.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+@CreatorsDsl
+inline fun <reified T : Any> InputStreamSupplier.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+@CreatorsDsl
+inline fun <reified T : Any> ReadableByteChannel.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+@CreatorsDsl
+inline fun <reified T : Any> Reader.readOf(done: Boolean = true): T = JSONStatic.jsonReadOf(this, typeReferenceOf(), done)
+@CreatorsDsl
+inline fun <reified T : Any> InputStream.readOf(done: Boolean = true): T = JSONStatic.jsonReadOf(this, typeReferenceOf(), done)
 

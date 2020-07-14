@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test
 class PhotoTest : KotlinTest() {
     @Test
     fun test() {
-        TypicodePhotoData.path().toLink().jsonReadOf<List<TypicodePhotoData>>().also { list ->
+        TypicodePhotoData.path().toLink().readOf<List<TypicodePhotoData>>().also { list ->
             info { list }
             info { list.size }
             list.size shouldBe TypicodePhotoData.size()

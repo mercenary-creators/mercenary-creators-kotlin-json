@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test
 class UserTest : KotlinTest() {
     @Test
     fun test() {
-        TypicodeUserData.path().toLink().jsonReadOf<List<TypicodeUserData>>().also { list ->
+        TypicodeUserData.path().toLink().readOf<List<TypicodeUserData>>().also { list ->
             info { list }
             info { list.size }
             list.size shouldBe TypicodeUserData.size()

@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test
 class PostTest : KotlinTest() {
     @Test
     fun test() {
-        TypicodePostData.path().toLink().jsonReadOf<List<TypicodePostData>>().also { list ->
+        TypicodePostData.path().toLink().readOf<List<TypicodePostData>>().also { list ->
             info { list }
             info { list.size }
             list.size shouldBe TypicodePostData.size()

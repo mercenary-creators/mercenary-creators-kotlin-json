@@ -14,64 +14,95 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.base
+package co.mercenary.creators.kotlin.json
 
+import co.mercenary.creators.kotlin.json.base.JSONArray
+import co.mercenary.creators.kotlin.json.base.JSONObject
 import co.mercenary.creators.kotlin.util.*
 import java.util.*
 
 interface JSONAccess<A> {
 
-    @IgnoreForSerialize
-    fun finderOf(): (A) -> Any?
+    @CreatorsDsl
+    val size: Int
 
-    @AssumptionDsl
+    @CreatorsDsl
+    @IgnoreForSerialize
+    fun isEmpty(): Boolean
+
+    @CreatorsDsl
+    @IgnoreForSerialize
+    fun isNotEmpty(): Boolean = isEmpty().isNotTrue()
+
+    @CreatorsDsl
+    fun sizeOf(): Int
+
+    @CreatorsDsl
+    fun findOf(look: A): Any?
+
+    @CreatorsDsl
     infix fun isDefined(look: A): Boolean
 
-    @AssumptionDsl
+    @CreatorsDsl
     infix fun isNull(look: A) = JSONStatic.isNull(accessOf(look))
 
-    @AssumptionDsl
+    @CreatorsDsl
     infix fun isLong(look: A) = JSONStatic.isLong(accessOf(look))
 
-    @AssumptionDsl
+    @CreatorsDsl
     infix fun isDate(look: A) = JSONStatic.isDate(accessOf(look))
 
-    @AssumptionDsl
+    @CreatorsDsl
     infix fun isArray(look: A) = JSONStatic.isArray(accessOf(look))
 
-    @AssumptionDsl
+    @CreatorsDsl
     infix fun isObject(look: A) = JSONStatic.isObject(accessOf(look))
 
-    @AssumptionDsl
+    @CreatorsDsl
     infix fun isNumber(look: A) = JSONStatic.isNumber(accessOf(look))
 
-    @AssumptionDsl
+    @CreatorsDsl
     infix fun isString(look: A) = JSONStatic.isString(accessOf(look))
 
-    @AssumptionDsl
+    @CreatorsDsl
     infix fun isDouble(look: A) = JSONStatic.isDouble(accessOf(look))
 
-    @AssumptionDsl
+    @CreatorsDsl
     infix fun isInteger(look: A) = JSONStatic.isInteger(accessOf(look))
 
-    @AssumptionDsl
+    @CreatorsDsl
     infix fun isBoolean(look: A) = JSONStatic.isBoolean(accessOf(look))
 
-    @AssumptionDsl
+    @CreatorsDsl
     infix fun isFunction(look: A) = JSONStatic.isFunction(accessOf(look))
 
+    @CreatorsDsl
     fun getTypeOf(look: A) = JSONStatic.getTypeOf(accessOf(look))
 
-    @AssumptionDsl
-
-    fun isTypeOf(look: A, type: JSONTypeOf) = type == getTypeOf(look)
+    @CreatorsDsl
     fun asLong(look: A): Long? = JSONStatic.asLong(accessOf(look))
+
+    @CreatorsDsl
     fun asDate(look: A): Date? = JSONStatic.asDate(accessOf(look))
+
+    @CreatorsDsl
     fun asInteger(look: A): Int? = JSONStatic.asInteger(accessOf(look))
+
+    @CreatorsDsl
     fun asDouble(look: A): Double? = JSONStatic.asDouble(accessOf(look))
+
+    @CreatorsDsl
     fun asString(look: A): String? = JSONStatic.asString(accessOf(look))
+
+    @CreatorsDsl
     fun asBoolean(look: A): Boolean? = JSONStatic.asBoolean(accessOf(look))
+
+    @CreatorsDsl
     fun asArray(look: A): JSONArray? = JSONStatic.asArray(accessOf(look))
+
+    @CreatorsDsl
     fun asObject(look: A): JSONObject? = JSONStatic.asObject(accessOf(look))
-    fun accessOf(look: A): Any? = if (isDefined(look)) finderOf().invoke(look) else null
+
+    @CreatorsDsl
+    fun accessOf(look: A): Any? = if (isDefined(look)) findOf(look) else null
 }

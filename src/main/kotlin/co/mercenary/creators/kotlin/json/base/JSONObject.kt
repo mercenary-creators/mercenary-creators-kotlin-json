@@ -16,55 +16,61 @@
 
 package co.mercenary.creators.kotlin.json.base
 
+import co.mercenary.creators.kotlin.json.*
 import co.mercenary.creators.kotlin.util.*
 
 class JSONObject : LinkedHashMap<String, Any?>, JSONBase<String, JSONObject> {
 
+    @CreatorsDsl
     constructor() : super()
 
+    @CreatorsDsl
     constructor(args: Map<String, Any?>) : super(args.toMap())
 
-    constructor(k: String, v: Any?) {
-        put(k, v)
-    }
+    @CreatorsDsl
+    constructor(k: String, v: Any?) : super(dictOf(k to v).toMap())
 
-    constructor(vararg args: Pair<String, Any?>) {
-        for ((k, v) in args) {
-            put(k, v)
-        }
-    }
+    @CreatorsDsl
+    constructor(vararg args: Pair<String, Any?>) : super(args.toMap())
 
-    constructor(args: Iterable<Pair<String, Any?>>) {
-        for ((k, v) in args) {
-            put(k, v)
-        }
-    }
+    @CreatorsDsl
+    override val size: Int
+        @IgnoreForSerialize
+        get() = sizeOf()
 
-    constructor(args: Sequence<Pair<String, Any?>>) {
-        for ((k, v) in args) {
-            put(k, v)
-        }
-    }
+    @CreatorsDsl
+    override fun clear() = super.clear()
 
-    override fun toString() = toJSONString()
-
+    @CreatorsDsl
     override fun clone() = copyOf()
 
-    override fun copyOf() = JSONStatic.toDeepCopy(this, JSONObject::class)
+    @CreatorsDsl
+    override fun copyOf() = deepOf()
 
-    @AssumptionDsl
-    override infix fun isDefined(look: String) = look in keys
+    @CreatorsDsl
+    override fun sizeOf() = super.size
 
+    @CreatorsDsl
     @IgnoreForSerialize
-    override fun finderOf() = this::get
+    override fun isEmpty() = super.isEmpty().isTrue()
 
-    @AssumptionDsl
+    @CreatorsDsl
+    override infix fun isDefined(look: String) = isNotEmpty() && look in keys
+
+    @CreatorsDsl
+    override fun findOf(look: String) = super.get(look)
+
+    @CreatorsDsl
     override fun equals(other: Any?) = when (other) {
-        is JSONObject -> this === other || size == other.size && super.equals(other)
+        is JSONObject -> this === other || sizeOf() == other.sizeOf() && super.equals(other)
         else -> false
     }
 
+    @CreatorsDsl
     override fun hashCode() = super.hashCode()
+
+    @CreatorsDsl
+    override fun toString() = toJSONString(true)
 
     companion object {
         private const val serialVersionUID = 2L

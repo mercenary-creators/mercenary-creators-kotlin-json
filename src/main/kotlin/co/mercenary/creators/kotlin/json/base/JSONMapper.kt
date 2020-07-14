@@ -34,8 +34,10 @@ import java.nio.channels.ReadableByteChannel
 import java.nio.file.Path
 import kotlin.reflect.KClass
 
-open class JSONMapper : ObjectMapper {
+@IgnoreForSerialize
+open class JSONMapper : ObjectMapper, StandardInterfaces<JSONMapper> {
 
+    @CreatorsDsl
     @JvmOverloads
     constructor(pretty: Boolean = true) : super() {
         pretty(pretty)
@@ -45,52 +47,80 @@ open class JSONMapper : ObjectMapper {
             .disable(AUTO_CLOSE_SOURCE).disable(AUTO_CLOSE_TARGET).disable(FAIL_ON_UNKNOWN_PROPERTIES)
     }
 
+    @CreatorsDsl
     protected constructor(parent: JSONMapper) : super(parent)
 
-    override fun copy() = JSONMapper(this)
+    @CreatorsDsl
+    override fun copy() = copyOf()
 
-    @AssumptionDsl
+    @CreatorsDsl
+    override fun clone() = copyOf()
+
+    @CreatorsDsl
+    override fun copyOf() = JSONMapper(this)
+
+    @CreatorsDsl
     override fun canSerialize(type: Class<*>?): Boolean {
         return when {
             type == null -> false
             type.isAnnotationPresent(JsonIgnoreType::class.java) -> {
-                type.getAnnotation(JsonIgnoreType::class.java).value.not()
+                type.getAnnotation(JsonIgnoreType::class.java).value.isNotTrue()
             }
             type.isAnnotationPresent(IgnoreForSerialize::class.java) -> {
-                type.getAnnotation(IgnoreForSerialize::class.java).value.not()
+                type.getAnnotation(IgnoreForSerialize::class.java).value.isNotTrue()
             }
             else -> super.canSerialize(type)
         }
     }
 
+    override fun hashCode() = super.hashCode()
+
+    override fun equals(other: Any?) = when (other) {
+        is JSONMapper -> this === other || super.equals(other)
+        else -> false
+    }
+
+    @CreatorsDsl
+    override fun toMapNames() = dictOf("type" to nameOf())
+
+    @CreatorsDsl
     private fun pretty(pretty: Boolean): ObjectMapper = if (pretty) setDefaultPrettyPrinter(TO_PRETTY_PRINTS).enable(INDENT_OUTPUT) else disable(INDENT_OUTPUT)
 
-    @AssumptionDsl
+    @CreatorsDsl
     fun canSerializeClass(type: Class<*>?) = canSerialize(type)
 
-    @AssumptionDsl
+    @CreatorsDsl
     fun canSerializeClass(type: KClass<*>?) = if (null == type) false else canSerializeClass(type.java)
 
-    @AssumptionDsl
+    @CreatorsDsl
     fun canSerializeValue(value: Any?) = if (null == value) false else canSerializeClass(value.javaClass)
 
+    @CreatorsDsl
     fun toByteArray(data: Any): ByteArray = writeValueAsBytes(data)
 
+    @CreatorsDsl
     fun toJSONString(value: Any): String = writeValueAsString(value)
 
+    @CreatorsDsl
     fun <T : Any> toDataType(value: Any, type: Class<T>): T = convertValue(value, type)
 
+    @CreatorsDsl
     fun <T : Any> toDataType(value: Any, type: KClass<T>): T = convertValue(value, type.java)
 
+    @CreatorsDsl
     fun <T : Any> toDataType(value: Any, type: TypeReference<T>): T = convertValue(value, type)
 
-    fun <T> toDeepCopy(value: T): T = readerFor((value as Any).javaClass).readValue(writeValueAsBytes(value))
+    @CreatorsDsl
+    fun <T> toDeepCopy(value: T): T = readerFor((value as Any).javaClass).readValue(toByteArray(value))
 
-    fun <T : Any> toDeepCopy(value: T, type: Class<T>): T = readerFor(type).readValue(writeValueAsBytes(value))
+    @CreatorsDsl
+    fun <T : Any> toDeepCopy(value: T, type: Class<T>): T = readerFor(type).readValue(toByteArray(value))
 
-    fun <T : Any> toDeepCopy(value: T, type: KClass<T>): T = readerFor(type.java).readValue(writeValueAsBytes(value))
+    @CreatorsDsl
+    fun <T : Any> toDeepCopy(value: T, type: KClass<T>): T = readerFor(type.java).readValue(toByteArray(value))
 
-    fun <T : Any> toDeepCopy(value: T, type: TypeReference<T>): T = readerFor(type).readValue(writeValueAsBytes(value))
+    @CreatorsDsl
+    fun <T : Any> toDeepCopy(value: T, type: TypeReference<T>): T = readerFor(type).readValue(toByteArray(value))
 
     fun <T : Any> jsonRead(value: URI, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
@@ -158,12 +188,25 @@ open class JSONMapper : ObjectMapper {
     @JvmOverloads
     fun <T : Any> jsonRead(value: InputStream, type: KClass<T>, done: Boolean = true): T = if (done) value.use { readerFor(type.java).readValue<T>(it) } else readerFor(type.java).readValue<T>(value)
 
+
     companion object {
         private const val serialVersionUID = 2L
+
+        @CreatorsDsl
         private val EXTENDED_MODULES = findModules()
+
+        @CreatorsDsl
         private val DEFAULT_TIMEZONE = TimeAndDate.getDefaultTimeZone()
+
+        @CreatorsDsl
         private val JSON_DATE_FORMAT = TimeAndDate.getDefaultDateFormat()
-        private val TO_INDENT_PRINTS = DefaultIndenter().withIndent(SPACE_STRING.repeat(4))
+
+        @CreatorsDsl
+        private val TO_INDENT_PRINTS = DefaultIndenter().withIndent("    ")
+
+        @CreatorsDsl
         private val TO_PRETTY_PRINTS = DefaultPrettyPrinter().withArrayIndenter(TO_INDENT_PRINTS).withObjectIndenter(TO_INDENT_PRINTS)
     }
+
+
 }

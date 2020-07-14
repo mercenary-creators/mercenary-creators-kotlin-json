@@ -16,20 +16,24 @@
 
 package co.mercenary.creators.kotlin.json.module
 
-import co.mercenary.creators.kotlin.util.TimeDuration
+import co.mercenary.creators.kotlin.util.*
 import com.fasterxml.jackson.core.*
 import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
+@CreatorsDsl
+@IgnoreForSerialize
 object TimeDurationDeserializer : StdDeserializer<TimeDuration>(TimeDuration::class.java) {
     override fun deserialize(parser: JsonParser, context: DeserializationContext): TimeDuration {
         return when (parser.currentToken) {
             JsonToken.VALUE_STRING -> {
+                val text = parser.text
                 try {
-                    TimeDuration.parse(parser.text)
+                    TimeDuration.parse(text)
                 }
                 catch (cause: Throwable) {
-                    throw JsonMappingException(parser, "error string for TimeDuration", cause)
+                    Throwables.thrown(cause)
+                    throw JsonMappingException(parser, "error string for TimeDuration($text)", cause)
                 }
             }
             else -> throw JsonMappingException(parser, "not a string for TimeDuration")

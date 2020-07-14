@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.base
+package co.mercenary.creators.kotlin.json
 
-import co.mercenary.creators.kotlin.util.type.Copyable
-
-interface JSONBase<A, B : JSONBase<A, B>> : JSONAccess<A>, JSONAware, JSONPathAware, Copyable<B>, Cloneable
+interface JSONPathAware {
+    fun pathOf(): EvaluationContext = JSONPath.path(this)
+}

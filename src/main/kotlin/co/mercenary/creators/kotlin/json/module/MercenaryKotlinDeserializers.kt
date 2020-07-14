@@ -16,10 +16,12 @@
 
 package co.mercenary.creators.kotlin.json.module
 
-import co.mercenary.creators.kotlin.util.TimeDuration
+import co.mercenary.creators.kotlin.util.*
 import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.deser.Deserializers
 
+@CreatorsDsl
+@IgnoreForSerialize
 object MercenaryKotlinDeserializers : Deserializers.Base() {
     override fun findBeanDeserializer(type: JavaType, config: DeserializationConfig, bean: BeanDescription): JsonDeserializer<*>? = when {
         type.hasRawClass(TimeDuration::class.java) -> TimeDurationDeserializer

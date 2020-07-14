@@ -14,9 +14,17 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.base
+package co.mercenary.creators.kotlin.json
+
+import co.mercenary.creators.kotlin.util.*
 
 interface JSONAware {
+
+    @CreatorsDsl
+    @IgnoreForSerialize
     fun toByteArray() = JSONStatic.toByteArray(this)
+
+    @CreatorsDsl
+    @IgnoreForSerialize
     fun toJSONString(pretty: Boolean = true) = JSONStatic.toJSONString(this, pretty)
 }

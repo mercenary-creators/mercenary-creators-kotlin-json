@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test
 class CommentTest : KotlinTest() {
     @Test
     fun test() {
-        TypicodeCommentData.path().toLink().jsonReadOf<List<TypicodeCommentData>>().also { list ->
+        TypicodeCommentData.path().toLink().readOf<List<TypicodeCommentData>>().also { list ->
             info { list }
             info { list.size }
             list.size shouldBe TypicodeCommentData.size()

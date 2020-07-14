@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.module
+package co.mercenary.creators.kotlin.json
 
-import com.fasterxml.jackson.core.*
-import com.fasterxml.jackson.core.util.VersionUtil
+import co.mercenary.creators.kotlin.util.*
 
-object PackageVersion : Versioned {
-    private val version = VersionUtil.parseVersion("9.6.8-SNAPSHOT", "co.mercenary-creators", "mercenary-creators-kotlin-json")
-    override fun version(): Version = version
-}
+interface JSONBase<A, B : JSONBase<A, B>> : JSONAccess<A>, JSONAware, JSONPathAware, Copyable<B>, Cloneable, Clearable

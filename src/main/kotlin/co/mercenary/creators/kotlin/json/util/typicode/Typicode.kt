@@ -16,6 +16,6 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-import co.mercenary.creators.kotlin.json.base.JSONAware
+import co.mercenary.creators.kotlin.json.JSONAware
 
 interface Typicode : JSONAware

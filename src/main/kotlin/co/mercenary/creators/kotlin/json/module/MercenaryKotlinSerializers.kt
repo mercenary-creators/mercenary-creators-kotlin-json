@@ -16,10 +16,12 @@
 
 package co.mercenary.creators.kotlin.json.module
 
-import co.mercenary.creators.kotlin.util.time.TimeDuration
+import co.mercenary.creators.kotlin.util.*
 import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.ser.Serializers
 
+@CreatorsDsl
+@IgnoreForSerialize
 object MercenaryKotlinSerializers : Serializers.Base() {
     override fun findSerializer(config: SerializationConfig, type: JavaType, bean: BeanDescription): JsonSerializer<*>? = when {
         type.hasRawClass(TimeDuration::class.java) -> TimeDurationSerializer

@@ -23,17 +23,19 @@ import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
+@IgnoreForSerialize
 class JSONStringFormatterService : StringFormatterService(1) {
 
     private val json: JSONMapper by lazy {
         JSONMapper(true)
     }
 
+    @CreatorsDsl
     override fun toSafeString(data: Any): String {
         return json.toJSONString(data)
     }
 
-    @AssumptionDsl
+    @CreatorsDsl
     override fun isValidClass(data: Any): Boolean {
         return when (data) {
             is String -> false

@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.base
+package co.mercenary.creators.kotlin.json.module
 
-import co.mercenary.creators.kotlin.json.path.*
+import co.mercenary.creators.kotlin.util.*
+import com.fasterxml.jackson.core.*
+import com.fasterxml.jackson.core.util.VersionUtil
 
-interface JSONPathAware {
-    fun pathOf(): EvaluationContext = JSONPath.path(this)
+@CreatorsDsl
+@IgnoreForSerialize
+object MercenaryPackageVersion : Versioned {
+
+    private val version = VersionUtil.parseVersion("9.7.1-SNAPSHOT", "co.mercenary-creators", "mercenary-creators-kotlin-json")
+
+    @CreatorsDsl
+    @IgnoreForSerialize
+    override fun version(): Version = version
 }

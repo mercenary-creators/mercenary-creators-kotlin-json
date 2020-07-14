@@ -16,39 +16,64 @@
 
 package co.mercenary.creators.kotlin.json.base
 
+import co.mercenary.creators.kotlin.json.*
 import co.mercenary.creators.kotlin.util.*
 
 class JSONArray : ArrayList<Any?>, JSONBase<Int, JSONArray> {
 
+    @CreatorsDsl
     constructor() : super()
 
+    @CreatorsDsl
     constructor(list: List<Any?>) : super(list.toList())
 
+    @CreatorsDsl
     constructor(vararg list: Any?) : super(list.toList())
 
+    @CreatorsDsl
     constructor(list: Iterable<Any?>) : super(list.toList())
 
+    @CreatorsDsl
     constructor(list: Sequence<Any?>) : super(list.toList())
 
-    override fun toString() = toJSONString()
+    @CreatorsDsl
+    override val size: Int
+        @IgnoreForSerialize
+        get() = sizeOf()
 
+    @CreatorsDsl
+    override fun clear() = super.clear()
+
+    @CreatorsDsl
     override fun clone() = copyOf()
 
-    override fun copyOf() = JSONStatic.toDeepCopy(this, JSONArray::class)
+    @CreatorsDsl
+    override fun copyOf() = deepOf()
 
+    @CreatorsDsl
+    override fun sizeOf() = super.size
+
+    @CreatorsDsl
+    override fun findOf(look: Int) = super.get(look)
+
+    @CreatorsDsl
     @IgnoreForSerialize
-    override fun finderOf() = this::get
+    override fun isEmpty() = super.isEmpty().isTrue()
 
-    @AssumptionDsl
-    override infix fun isDefined(look: Int) = look in 0 until size
+    @CreatorsDsl
+    override infix fun isDefined(look: Int) = isNotEmpty() && look in 0 until sizeOf()
 
-    @AssumptionDsl
+    @CreatorsDsl
     override fun equals(other: Any?) = when (other) {
-        is JSONArray -> this === other || size == other.size && super.equals(other)
+        is JSONArray -> this === other || sizeOf() == other.sizeOf() && super.equals(other)
         else -> false
     }
 
+    @CreatorsDsl
     override fun hashCode() = super.hashCode()
+
+    @CreatorsDsl
+    override fun toString() = toJSONString(true)
 
     companion object {
         private const val serialVersionUID = 2L

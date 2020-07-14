@@ -33,7 +33,7 @@ class MainTest : KotlinTest() {
         val main = MainData(53.years + 4.weeks, sequenceOf(2, 4))
         val buff = main.toString()
         info { buff }
-        val back = buff.jsonReadOf<MainData>()
+        val back = buff.readOf<MainData>()
         info { back }
         warn { this }
         error { here() }

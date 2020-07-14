@@ -16,6 +16,7 @@
 
 package co.mercenary.creators.kotlin.json.base
 
+import co.mercenary.creators.kotlin.json.*
 import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
 import com.fasterxml.jackson.core.type.TypeReference
@@ -25,8 +26,8 @@ import java.net.*
 import java.nio.channels.ReadableByteChannel
 import java.nio.file.Path
 import java.util.*
-import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.reflect.*
+import java.util.concurrent.atomic.*
+import kotlin.reflect.KClass
 
 object JSONStatic {
 
@@ -58,15 +59,20 @@ object JSONStatic {
 
     private val DI_MIN = Double.MAX_VALUE.toBigDecimal().negate().toBigInteger()
 
+    @JvmStatic
+    @CreatorsDsl
     private fun getTypeOf(look: Number): JSONTypeOf = if (isNumber(look)) JSONTypeOf.NUMBER else JSONTypeOf.UNDEFINED
 
     @JvmStatic
+    @CreatorsDsl
     fun getTypeOf(look: Any?) = when (look) {
         null -> JSONTypeOf.NULL
         is Date -> JSONTypeOf.DATE
         is Number -> getTypeOf(look)
         is String -> JSONTypeOf.STRING
+        is CharSequence -> JSONTypeOf.STRING
         is Boolean -> JSONTypeOf.BOOLEAN
+        is AtomicBoolean -> JSONTypeOf.BOOLEAN
         isArray(look) -> JSONTypeOf.ARRAY
         isObject(look) -> JSONTypeOf.OBJECT
         isFunction(look) -> JSONTypeOf.FUNCTION
@@ -74,7 +80,7 @@ object JSONStatic {
     }
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun isFunction(look: Any?) = when (look) {
         null -> false
         is Function0<*> -> true
@@ -82,7 +88,7 @@ object JSONStatic {
     }
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun isArray(look: Any?) = when (look) {
         null -> false
         is List<*> -> true
@@ -93,7 +99,7 @@ object JSONStatic {
     }
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun isObject(look: Any?) = when (look) {
         null -> false
         is Map<*, *> -> true
@@ -103,14 +109,14 @@ object JSONStatic {
     }
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun isDataClass(look: Any?) = when (look) {
         null -> false
         else -> look.javaClass.kotlin.isData
     }
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun isString(look: Any?) = when (look) {
         null -> false
         is String -> true
@@ -119,7 +125,7 @@ object JSONStatic {
     }
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun isBoolean(look: Any?) = when (look) {
         null -> false
         is Boolean -> true
@@ -128,7 +134,7 @@ object JSONStatic {
     }
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun isNumber(look: Any?) = when (look) {
         null -> false
         is Number -> isDouble(look)
@@ -136,7 +142,7 @@ object JSONStatic {
     }
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun isDate(look: Any?) = when (look) {
         null -> false
         is Date -> true
@@ -144,44 +150,51 @@ object JSONStatic {
     }
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun isNull(look: Any?) = when (look) {
         null -> true
         else -> false
     }
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun isLong(look: Any?) = when (look) {
         null -> false
         is Long, Int, Short, Char, Byte -> true
+        is AtomicLong -> true
+        is AtomicInteger -> true
         is BigInteger -> look in LV_MIN..LV_MAX
         else -> false
     }
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun isInteger(look: Any?) = when (look) {
         null -> false
         is Int, Short, Char, Byte -> true
+        is AtomicInteger -> true
         is Long -> look in IR_MIN..IR_MAX
         is BigInteger -> look in IV_MIN..IV_MAX
+        is AtomicLong -> look.toBigInteger() in IV_MIN..IV_MAX
         else -> false
     }
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun isDouble(look: Any?) = when (look) {
         null -> false
-        is Float -> look.isFinite()
-        is Double -> look.isFinite()
+        is Float -> look.isValid()
+        is Double -> look.isValid()
         is Int, Long, Short, Char, Byte -> true
         is BigDecimal -> look <= DV_MAX && look >= DV_MIN
         is BigInteger -> look <= DI_MAX && look >= DI_MIN
+        is AtomicLong -> true
+        is AtomicInteger -> true
         else -> false
     }
 
     @JvmStatic
+    @CreatorsDsl
     fun asInteger(look: Any?): Int? = when (look) {
         null -> null
         is Number -> if (isInteger(look)) look.toInt() else null
@@ -189,6 +202,7 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @CreatorsDsl
     fun asLong(look: Any?): Long? = when (look) {
         null -> null
         is Number -> if (isLong(look)) look.toLong() else null
@@ -196,6 +210,7 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @CreatorsDsl
     fun asDate(look: Any?): Date? = when (look) {
         null -> null
         is Date -> look
@@ -203,6 +218,7 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @CreatorsDsl
     fun asString(look: Any?): String? = when (look) {
         null -> null
         is String -> look
@@ -211,14 +227,16 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @CreatorsDsl
     fun asBoolean(look: Any?): Boolean? = when (look) {
         null -> null
-        is Boolean -> look
+        is Boolean -> look.toBoolean()
         is AtomicBoolean -> look.toBoolean()
         else -> null
     }
 
     @JvmStatic
+    @CreatorsDsl
     fun asDouble(look: Any?): Double? = when (look) {
         null -> null
         is Number -> if (isDouble(look)) look.toDouble() else null
@@ -226,6 +244,7 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @CreatorsDsl
     fun asObject(look: Any?): JSONObject? = when (look) {
         null -> null
         is JSONObject -> look
@@ -233,6 +252,7 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @CreatorsDsl
     fun asArray(look: Any?): JSONArray? = when (look) {
         null -> null
         is JSONArray -> look
@@ -244,6 +264,7 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> asDataType(look: Any, type: Class<T>): T? = try {
         toDataType(look, type)
     }
@@ -253,9 +274,11 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> asDataTypeOf(look: Any?, type: Class<T>): T? = look?.let { asDataType(it, type) }
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> asDataType(look: Any, type: KClass<T>): T? = try {
         toDataType(look, type)
     }
@@ -265,9 +288,11 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> asDataTypeOf(look: Any?, type: KClass<T>): T? = look?.let { asDataType(it, type) }
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> asDataType(look: Any, type: TypeReference<T>): T? = try {
         toDataType(look, type)
     }
@@ -277,92 +302,29 @@ object JSONStatic {
     }
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> asDataTypeOf(look: Any?, type: TypeReference<T>): T? = look?.let { asDataType(it, type) }
 
     @JvmStatic
+    @CreatorsDsl
     fun toByteArray(data: Any) = NORMAL.toByteArray(data)
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun canSerializeValue(data: Any?) = NORMAL.canSerializeValue(data)
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun canSerializeClass(type: Class<*>?) = NORMAL.canSerializeClass(type)
 
     @JvmStatic
-    @AssumptionDsl
+    @CreatorsDsl
     fun canSerializeClass(type: KClass<*>?) = NORMAL.canSerializeClass(type)
 
     @JvmStatic
+    @CreatorsDsl
     @JvmOverloads
     fun toJSONString(data: Any, pretty: Boolean = true) = mapperOf(pretty).toJSONString(data)
-
-    @JvmStatic
-    @JvmOverloads
-    fun toJSONString(data: () -> Any, pretty: Boolean = true) = mapperOf(pretty).toJSONString(data.invoke())
-
-    @JvmStatic
-    @JvmOverloads
-    fun <T : JSONAware> toJSONString(data: T, pretty: Boolean = true) = mapperOf(pretty).toJSONString(data)
-
-    @JvmStatic
-    fun toJSONArray(data: URI) = jsonReadOf(data, JSONArray::class.java)
-
-    @JvmStatic
-    fun toJSONArray(data: URL) = jsonReadOf(data, JSONArray::class.java)
-
-    @JvmStatic
-    fun toJSONArray(data: File) = jsonReadOf(data, JSONArray::class.java)
-
-    @JvmStatic
-    fun toJSONArray(data: Path) = jsonReadOf(data, JSONArray::class.java)
-
-    @JvmStatic
-    fun toJSONArray(data: String) = jsonReadOf(data, JSONArray::class.java)
-
-    @JvmStatic
-    fun toJSONArray(data: ByteArray) = jsonReadOf(data, JSONArray::class.java)
-
-    @JvmStatic
-    fun toJSONArray(data: InputStreamSupplier) = jsonReadOf(data, JSONArray::class.java)
-
-    @JvmStatic
-    @JvmOverloads
-    fun toJSONArray(data: Reader, done: Boolean = true) = jsonReadOf(data, JSONArray::class.java, done)
-
-    @JvmStatic
-    @JvmOverloads
-    fun toJSONArray(data: InputStream, done: Boolean = true) = jsonReadOf(data, JSONArray::class.java, done)
-
-    @JvmStatic
-    fun toJSONObject(data: URI) = jsonReadOf(data, JSONObject::class.java)
-
-    @JvmStatic
-    fun toJSONObject(data: URL) = jsonReadOf(data, JSONObject::class.java)
-
-    @JvmStatic
-    fun toJSONObject(data: File) = jsonReadOf(data, JSONObject::class.java)
-
-    @JvmStatic
-    fun toJSONObject(data: Path) = jsonReadOf(data, JSONObject::class.java)
-
-    @JvmStatic
-    fun toJSONObject(data: String) = jsonReadOf(data, JSONObject::class.java)
-
-    @JvmStatic
-    fun toJSONObject(data: InputStreamSupplier) = jsonReadOf(data, JSONObject::class.java)
-
-    @JvmStatic
-    fun toJSONObject(data: ByteArray) = jsonReadOf(data, JSONObject::class.java)
-
-    @JvmStatic
-    @JvmOverloads
-    fun toJSONObject(data: Reader, done: Boolean = true) = jsonReadOf(data, JSONObject::class.java, done)
-
-    @JvmStatic
-    @JvmOverloads
-    fun toJSONObject(data: InputStream, done: Boolean = true) = jsonReadOf(data, JSONObject::class.java, done)
 
     @JvmStatic
     fun <T : Any> jsonReadOf(data: URI, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
@@ -461,25 +423,34 @@ object JSONStatic {
     fun <T : Any> jsonReadOf(data: InputStream, type: KClass<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T> toDeepCopy(data: T) = NORMAL.toDeepCopy(data)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> toDeepCopy(data: T, type: Class<T>) = NORMAL.toDeepCopy(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> toDeepCopy(data: T, type: KClass<T>) = NORMAL.toDeepCopy(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> toDeepCopy(data: T, type: TypeReference<T>) = NORMAL.toDeepCopy(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> toDataType(data: Any, type: Class<T>) = NORMAL.toDataType(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> toDataType(data: Any, type: KClass<T>) = NORMAL.toDataType(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> toDataType(data: Any, type: TypeReference<T>) = NORMAL.toDataType(data, type)
 
+    @JvmStatic
+    @CreatorsDsl
     private fun mapperOf(pretty: Boolean = true) = if (pretty) PRETTY else NORMAL
 }

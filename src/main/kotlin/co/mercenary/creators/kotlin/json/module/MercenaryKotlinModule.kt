@@ -16,13 +16,15 @@
 
 package co.mercenary.creators.kotlin.json.module
 
+import co.mercenary.creators.kotlin.util.*
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.module.SimpleModule
 
-class MercenaryKotlinModule : SimpleModule("MercenaryKotlinModule", PackageVersion.version()) {
+@IgnoreForSerialize
+class MercenaryKotlinModule : SimpleModule("MercenaryKotlinModule", MercenaryPackageVersion.version()) {
     override fun setupModule(context: SetupContext) {
         super.setupModule(context)
-        if (context.isEnabled(MapperFeature.USE_ANNOTATIONS).not()) {
+        if (context.isEnabled(MapperFeature.USE_ANNOTATIONS).isNotTrue()) {
             throw IllegalStateException("$moduleName requires USE_ANNOTATIONS to be true or it cannot function")
         }
         context.addSerializers(MercenaryKotlinSerializers)

@@ -16,15 +16,17 @@
 
 package co.mercenary.creators.kotlin.json.module
 
-import co.mercenary.creators.kotlin.util.IgnoreForSerialize
+import co.mercenary.creators.kotlin.util.*
 import com.fasterxml.jackson.databind.introspect.*
 
+@CreatorsDsl
+@IgnoreForSerialize
 object MercenaryKotlinAnnotationIntrospector : JacksonAnnotationIntrospector() {
 
     override fun _isIgnorable(annotated: Annotated): Boolean {
         val look = _findAnnotation(annotated, IgnoreForSerialize::class.java)
         if (look != null) {
-            return look.value
+            return look.value.isTrue()
         }
         return super._isIgnorable(annotated)
     }
@@ -32,10 +34,12 @@ object MercenaryKotlinAnnotationIntrospector : JacksonAnnotationIntrospector() {
     override fun isIgnorableType(annotated: AnnotatedClass): Boolean? {
         val look = _findAnnotation(annotated, IgnoreForSerialize::class.java)
         if (look != null) {
-            return look.value
+            return look.value.isTrue()
         }
         return super.isIgnorableType(annotated)
     }
 
-    override fun version() = PackageVersion.version()
+    @CreatorsDsl
+    @IgnoreForSerialize
+    override fun version() = MercenaryPackageVersion.version()
 }

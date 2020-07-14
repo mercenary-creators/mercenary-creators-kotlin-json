@@ -16,11 +16,11 @@
 
 package co.mercenary.creators.kotlin.json.test.main
 
-import co.mercenary.creators.kotlin.json.base.JSONAware
+import co.mercenary.creators.kotlin.json.JSONAware
 import co.mercenary.creators.kotlin.util.*
 import com.fasterxml.jackson.annotation.JsonIgnore
 
-class MainData(val time: TimeDuration, val list: Sequence<Int>) : JSONAware {
+class MainData @CreatorsDsl constructor(val time: TimeDuration, val list: Sequence<Int>) : JSONAware {
 
     @JsonIgnore
     val look = false
@@ -30,5 +30,6 @@ class MainData(val time: TimeDuration, val list: Sequence<Int>) : JSONAware {
 
     val data = TestData(CREATORS_AUTHOR_INFO)
 
+    @CreatorsDsl
     override fun toString() = toJSONString()
 }

@@ -14,8 +14,37 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.base
+package co.mercenary.creators.kotlin.json
 
+import co.mercenary.creators.kotlin.util.*
+
+@IgnoreForSerialize
 enum class JSONTypeOf {
-    OBJECT, ARRAY, STRING, BOOLEAN, NUMBER, DATE, FUNCTION, NULL, UNDEFINED
+
+    @CreatorsDsl
+    OBJECT,
+
+    @CreatorsDsl
+    ARRAY,
+
+    @CreatorsDsl
+    STRING,
+
+    @CreatorsDsl
+    BOOLEAN,
+
+    @CreatorsDsl
+    NUMBER,
+
+    @CreatorsDsl
+    DATE,
+
+    @CreatorsDsl
+    FUNCTION,
+
+    @CreatorsDsl
+    NULL,
+
+    @CreatorsDsl
+    UNDEFINED
 }
