@@ -17,9 +17,10 @@
 package co.mercenary.creators.kotlin.json.test.main.path
 
 import co.mercenary.creators.kotlin.json.JSONAware
+import co.mercenary.creators.kotlin.util.CreatorsDsl
 import com.fasterxml.jackson.annotation.*
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-data class BookData(val category: String, val author: String, val title: String, val isbn: String?, @JsonProperty("display-price") val price: Double) : JSONAware {
+data class BookData @CreatorsDsl constructor(val category: String, val author: String, val title: String, val isbn: String?, @JsonProperty("display-price") val price: Double) : JSONAware {
     override fun toString() = toJSONString()
 }

@@ -29,7 +29,6 @@ import java.nio.channels.ReadableByteChannel
 import java.nio.file.Path
 import kotlin.reflect.KClass
 
-@IgnoreForSerialize
 object JSONPath {
 
     private val CACHED = atomicMapOf<String, JSONCompiledPath>()
@@ -62,7 +61,7 @@ object JSONPath {
             is URL -> JSONEvaluationContext(data.toInputStream())
             is File -> JSONEvaluationContext(data.toInputStream())
             is Path -> JSONEvaluationContext(data.toInputStream())
-            is Reader-> JSONEvaluationContext(data.toInputStream())
+            is Reader -> JSONEvaluationContext(data.toInputStream())
             is ByteArray -> JSONEvaluationContext(data.toInputStream())
             is InputStreamSupplier -> JSONEvaluationContext(data.toInputStream())
             is ReadableByteChannel -> JSONEvaluationContext(data.toInputStream())

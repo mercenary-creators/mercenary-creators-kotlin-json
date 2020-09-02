@@ -73,28 +73,40 @@ inline fun <reified T : Any> deepOf(data: T): T = JSONStatic.toDeepCopy(data, T:
 
 @CreatorsDsl
 inline fun <reified T : JSONAware> T.deepOf(): T = JSONStatic.toDeepCopy(this, T::class.java)
+
 @CreatorsDsl
 inline fun <reified T : Any, A> JSONAccess<A>.asDataTypeOf(look: A): T? = JSONStatic.asDataTypeOf(accessOf(look), typeReferenceOf())
+
 @CreatorsDsl
 inline fun <reified T : Any> Any.toDataType(): T = JSONStatic.toDataType(this, typeReferenceOf())
+
 @CreatorsDsl
-inline fun <reified T : Any> URI.readOf(): T = JSONStatic.jsonReadOf(this,typeReferenceOf())
+inline fun <reified T : Any> URI.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+
 @CreatorsDsl
 inline fun <reified T : Any> URL.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+
 @CreatorsDsl
 inline fun <reified T : Any> File.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+
 @CreatorsDsl
 inline fun <reified T : Any> Path.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+
 @CreatorsDsl
 inline fun <reified T : Any> String.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+
 @CreatorsDsl
 inline fun <reified T : Any> ByteArray.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+
 @CreatorsDsl
 inline fun <reified T : Any> InputStreamSupplier.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+
 @CreatorsDsl
 inline fun <reified T : Any> ReadableByteChannel.readOf(): T = JSONStatic.jsonReadOf(this, typeReferenceOf())
+
 @CreatorsDsl
 inline fun <reified T : Any> Reader.readOf(done: Boolean = true): T = JSONStatic.jsonReadOf(this, typeReferenceOf(), done)
+
 @CreatorsDsl
 inline fun <reified T : Any> InputStream.readOf(done: Boolean = true): T = JSONStatic.jsonReadOf(this, typeReferenceOf(), done)
 

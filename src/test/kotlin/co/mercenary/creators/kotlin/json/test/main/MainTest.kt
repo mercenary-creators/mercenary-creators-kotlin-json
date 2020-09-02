@@ -20,16 +20,19 @@ import co.mercenary.creators.kotlin.json.*
 import co.mercenary.creators.kotlin.util.*
 import org.junit.jupiter.api.Test
 
-@IgnoreForSerialize
 class MainTest : KotlinTest() {
     @Test
     fun test() {
-        val data = json("author" to author, "age" to 53.years + 4.weeks, "list" to sequenceOf(2, 4), "horz" to "Maël Hörz\n")
+        val data = json("name" to author, "time" to 53.years + 4.weeks, "list" to sequenceOf(2, 4).toList(), "horz" to "Maël Hörz\n")
         info { data.copyOf() }
         data.size shouldBe 4
         data["date"] = dateOf()
         info { data }
         data.size shouldBe 5
+        warn { data isDefined "date" }
+        warn { data isDate "date" }
+        warn { data isLong "date" }
+        warn { data isDefined "main" }
         val main = MainData(53.years + 4.weeks, sequenceOf(2, 4))
         val buff = main.toString()
         info { buff }

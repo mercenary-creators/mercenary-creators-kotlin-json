@@ -25,7 +25,7 @@ import com.fasterxml.jackson.core.JsonParser.Feature.*
 import com.fasterxml.jackson.core.json.JsonWriteFeature.ESCAPE_NON_ASCII
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.core.util.*
-import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
+import com.fasterxml.jackson.databind.DeserializationFeature.*
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT
 import java.io.*
@@ -44,7 +44,7 @@ open class JSONMapper : ObjectMapper, StandardInterfaces<JSONMapper> {
             .registerModules(EXTENDED_MODULES)
             .setDateFormat(JSON_DATE_FORMAT).setTimeZone(DEFAULT_TIMEZONE)
             .enable(ALLOW_COMMENTS).enable(ESCAPE_NON_ASCII.mappedFeature()).enable(WRITE_BIGDECIMAL_AS_PLAIN)
-            .disable(AUTO_CLOSE_SOURCE).disable(AUTO_CLOSE_TARGET).disable(FAIL_ON_UNKNOWN_PROPERTIES)
+            .disable(AUTO_CLOSE_SOURCE).disable(AUTO_CLOSE_TARGET).disable(FAIL_ON_UNKNOWN_PROPERTIES, FAIL_ON_IGNORED_PROPERTIES, ACCEPT_FLOAT_AS_INT)
     }
 
     @CreatorsDsl
@@ -122,74 +122,104 @@ open class JSONMapper : ObjectMapper, StandardInterfaces<JSONMapper> {
     @CreatorsDsl
     fun <T : Any> toDeepCopy(value: T, type: TypeReference<T>): T = readerFor(type).readValue(toByteArray(value))
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: URI, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: URL, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: String, type: TypeReference<T>): T = readerFor(type).readValue(value)
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: ByteArray, type: TypeReference<T>): T = readerFor(type).readValue(value)
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: File, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: Path, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: InputStreamSupplier, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: ReadableByteChannel, type: TypeReference<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @CreatorsDsl
     @JvmOverloads
     fun <T : Any> jsonRead(value: Reader, type: TypeReference<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
+    @CreatorsDsl
     @JvmOverloads
     fun <T : Any> jsonRead(value: InputStream, type: TypeReference<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: URI, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: URL, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: String, type: Class<T>): T = readerFor(type).readValue(value)
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: ByteArray, type: Class<T>): T = readerFor(type).readValue(value)
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: File, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: Path, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: InputStreamSupplier, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: ReadableByteChannel, type: Class<T>): T = value.toInputStream().use { readerFor(type).readValue(it) }
 
+    @CreatorsDsl
     @JvmOverloads
     fun <T : Any> jsonRead(value: Reader, type: Class<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
+    @CreatorsDsl
     @JvmOverloads
     fun <T : Any> jsonRead(value: InputStream, type: Class<T>, done: Boolean = true): T = if (done) value.use { readerFor(type).readValue<T>(it) } else readerFor(type).readValue<T>(value)
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: URI, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: URL, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: String, type: KClass<T>): T = readerFor(type.java).readValue(value)
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: ByteArray, type: KClass<T>): T = readerFor(type.java).readValue(value)
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: File, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: Path, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: InputStreamSupplier, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue(it) }
 
+    @CreatorsDsl
     fun <T : Any> jsonRead(value: ReadableByteChannel, type: KClass<T>): T = value.toInputStream().use { readerFor(type.java).readValue(it) }
 
+    @CreatorsDsl
     @JvmOverloads
     fun <T : Any> jsonRead(value: Reader, type: KClass<T>, done: Boolean = true): T = if (done) value.use { readerFor(type.java).readValue<T>(it) } else readerFor(type.java).readValue<T>(value)
 
+    @CreatorsDsl
     @JvmOverloads
     fun <T : Any> jsonRead(value: InputStream, type: KClass<T>, done: Boolean = true): T = if (done) value.use { readerFor(type.java).readValue<T>(it) } else readerFor(type.java).readValue<T>(value)
 
-
     companion object {
+
         private const val serialVersionUID = 2L
 
         @CreatorsDsl
@@ -207,6 +237,4 @@ open class JSONMapper : ObjectMapper, StandardInterfaces<JSONMapper> {
         @CreatorsDsl
         private val TO_PRETTY_PRINTS = DefaultPrettyPrinter().withArrayIndenter(TO_INDENT_PRINTS).withObjectIndenter(TO_INDENT_PRINTS)
     }
-
-
 }

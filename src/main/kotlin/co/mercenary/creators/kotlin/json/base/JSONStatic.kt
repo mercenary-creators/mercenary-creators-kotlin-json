@@ -327,98 +327,128 @@ object JSONStatic {
     fun toJSONString(data: Any, pretty: Boolean = true) = mapperOf(pretty).toJSONString(data)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: URI, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: URL, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: File, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: Path, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: String, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: ByteArray, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: InputStreamSupplier, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: ReadableByteChannel, type: TypeReference<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     @JvmOverloads
     fun <T : Any> jsonReadOf(data: Reader, type: TypeReference<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
 
     @JvmStatic
+    @CreatorsDsl
     @JvmOverloads
     fun <T : Any> jsonReadOf(data: InputStream, type: TypeReference<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: URI, type: Class<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: URL, type: Class<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: File, type: Class<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: Path, type: Class<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: String, type: Class<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: ByteArray, type: Class<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: InputStreamSupplier, type: Class<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: ReadableByteChannel, type: Class<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     @JvmOverloads
     fun <T : Any> jsonReadOf(data: Reader, type: Class<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
 
     @JvmStatic
+    @CreatorsDsl
     @JvmOverloads
     fun <T : Any> jsonReadOf(data: InputStream, type: Class<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: URI, type: KClass<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: URL, type: KClass<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: File, type: KClass<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: Path, type: KClass<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: String, type: KClass<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: ByteArray, type: KClass<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: InputStreamSupplier, type: KClass<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     fun <T : Any> jsonReadOf(data: ReadableByteChannel, type: KClass<T>) = NORMAL.jsonRead(data, type)
 
     @JvmStatic
+    @CreatorsDsl
     @JvmOverloads
     fun <T : Any> jsonReadOf(data: Reader, type: KClass<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
 
     @JvmStatic
+    @CreatorsDsl
     @JvmOverloads
     fun <T : Any> jsonReadOf(data: InputStream, type: KClass<T>, done: Boolean = true) = NORMAL.jsonRead(data, type, done)
 
