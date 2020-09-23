@@ -16,6 +16,6 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-data class TypicodeCompanyData(val name: String, val catchPhrase: String, val bs: String) : Typicode {
+data class TypicodeCompanyData(val name: String, val catchPhrase: String, val bs: String) : AbstractTypicodeAware {
     override fun toString() = toJSONString()
 }

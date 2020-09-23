@@ -16,6 +16,11 @@
 
 package co.mercenary.creators.kotlin.json
 
+import co.mercenary.creators.kotlin.util.*
+
 interface JSONPathAware {
-    fun pathOf(): EvaluationContext = JSONPath.path(this)
+
+    @CreatorsDsl
+    @IgnoreForSerialize
+    fun getEvaluationContext(): EvaluationContext = JSONPath.path(this)
 }

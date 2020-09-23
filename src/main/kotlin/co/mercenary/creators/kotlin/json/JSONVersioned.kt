@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.util.typicode
+package co.mercenary.creators.kotlin.json
 
-import co.mercenary.creators.kotlin.json.JSONAware
+import co.mercenary.creators.kotlin.util.*
 
-interface Typicode : JSONAware
+interface JSONVersioned<T : Comparable<T>> {
+
+    @CreatorsDsl
+    @IgnoreForSerialize
+    fun getVersion(): T
+}

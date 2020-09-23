@@ -18,7 +18,7 @@ package co.mercenary.creators.kotlin.json.util.typicode
 
 import co.mercenary.creators.kotlin.util.*
 
-data class TypicodeTodoData(val userId: Int, val id: Int, val title: String, val completed: Boolean) : Typicode {
+data class TypicodeTodoData(val userId: Int, val id: Int, val title: String, val completed: Boolean) : AbstractTypicodeAware {
 
     override fun toString() = toJSONString()
 

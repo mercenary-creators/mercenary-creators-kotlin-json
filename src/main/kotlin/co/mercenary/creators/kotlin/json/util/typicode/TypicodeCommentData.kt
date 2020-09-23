@@ -18,8 +18,7 @@ package co.mercenary.creators.kotlin.json.util.typicode
 
 import co.mercenary.creators.kotlin.util.*
 
-data class TypicodeCommentData(val postId: Int, val id: Int, val name: String, val email: String, val body: String) : Typicode {
-
+data class TypicodeCommentData(val postId: Int, val id: Int, val name: String, val email: String, val body: String) : AbstractTypicodeAware {
     override fun toString() = toJSONString()
 
     companion object {

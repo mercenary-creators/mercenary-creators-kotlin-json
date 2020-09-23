@@ -16,17 +16,20 @@
 
 package co.mercenary.creators.kotlin.json.base
 
+import co.mercenary.creators.kotlin.json.JSONVersioned
 import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
 import co.mercenary.creators.kotlin.util.time.TimeAndDate
 import com.fasterxml.jackson.annotation.JsonIgnoreType
+import com.fasterxml.jackson.core.*
 import com.fasterxml.jackson.core.JsonGenerator.Feature.*
 import com.fasterxml.jackson.core.JsonParser.Feature.*
+import com.fasterxml.jackson.core.json.JsonWriteFeature
 import com.fasterxml.jackson.core.json.JsonWriteFeature.ESCAPE_NON_ASCII
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.core.util.*
+import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.DeserializationFeature.*
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT
 import java.io.*
 import java.net.*
@@ -35,20 +38,41 @@ import java.nio.file.Path
 import kotlin.reflect.KClass
 
 @IgnoreForSerialize
-open class JSONMapper : ObjectMapper, StandardInterfaces<JSONMapper> {
+open class JSONMapper : ObjectMapper, StandardInterfaces<JSONMapper>, JSONVersioned<Version> {
 
     @CreatorsDsl
     @JvmOverloads
     constructor(pretty: Boolean = true) : super() {
-        pretty(pretty)
-            .registerModules(EXTENDED_MODULES)
-            .setDateFormat(JSON_DATE_FORMAT).setTimeZone(DEFAULT_TIMEZONE)
-            .enable(ALLOW_COMMENTS).enable(ESCAPE_NON_ASCII.mappedFeature()).enable(WRITE_BIGDECIMAL_AS_PLAIN)
-            .disable(AUTO_CLOSE_SOURCE).disable(AUTO_CLOSE_TARGET).disable(FAIL_ON_UNKNOWN_PROPERTIES, FAIL_ON_IGNORED_PROPERTIES, ACCEPT_FLOAT_AS_INT)
+        pretty(pretty).setDefaultModules().setDefaultDateFormat().setDefaultTimeZone()
+            .features(true, ALLOW_COMMENTS, ESCAPE_NON_ASCII, WRITE_BIGDECIMAL_AS_PLAIN)
+            .features(false, AUTO_CLOSE_SOURCE, AUTO_CLOSE_TARGET, FAIL_ON_UNKNOWN_PROPERTIES, FAIL_ON_IGNORED_PROPERTIES, ACCEPT_FLOAT_AS_INT)
     }
 
     @CreatorsDsl
     protected constructor(parent: JSONMapper) : super(parent)
+
+    @CreatorsDsl
+    private fun ObjectMapper.setDefaultModules(): ObjectMapper = findAndRegisterModules()
+
+    @CreatorsDsl
+    private fun ObjectMapper.setDefaultTimeZone(): ObjectMapper = setTimeZone(TimeAndDate.getDefaultTimeZone())
+
+    @CreatorsDsl
+    private fun ObjectMapper.setDefaultDateFormat(): ObjectMapper = setDateFormat(TimeAndDate.getDefaultDateFormat())
+
+    @CreatorsDsl
+    private fun ObjectMapper.features(flag: Boolean, data: Any, vararg list: Any): ObjectMapper {
+        listOf(data, *list).forEach { feature ->
+            when (feature) {
+                is JsonParser.Feature -> configure(feature, flag)
+                is SerializationFeature -> configure(feature, flag)
+                is JsonGenerator.Feature -> configure(feature, flag)
+                is DeserializationFeature -> configure(feature, flag)
+                is JsonWriteFeature -> configure(feature.mappedFeature(), flag)
+            }
+        }
+        return this
+    }
 
     @CreatorsDsl
     override fun copy() = copyOf()
@@ -58,6 +82,10 @@ open class JSONMapper : ObjectMapper, StandardInterfaces<JSONMapper> {
 
     @CreatorsDsl
     override fun copyOf() = JSONMapper(this)
+
+    @CreatorsDsl
+    @IgnoreForSerialize
+    override fun getVersion(): Version = version()
 
     @CreatorsDsl
     override fun canSerialize(type: Class<*>?): Boolean {
@@ -73,10 +101,15 @@ open class JSONMapper : ObjectMapper, StandardInterfaces<JSONMapper> {
         }
     }
 
-    override fun hashCode() = super.hashCode()
+    @CreatorsDsl
+    override fun toString() = nameOf()
 
+    @CreatorsDsl
+    override fun hashCode() = getVersion().hashCode()
+
+    @CreatorsDsl
     override fun equals(other: Any?) = when (other) {
-        is JSONMapper -> this === other || super.equals(other)
+        is JSONMapper -> this === other || getVersion() isSameAs other.getVersion()
         else -> false
     }
 
@@ -223,18 +256,11 @@ open class JSONMapper : ObjectMapper, StandardInterfaces<JSONMapper> {
         private const val serialVersionUID = 2L
 
         @CreatorsDsl
-        private val EXTENDED_MODULES = findModules()
-
-        @CreatorsDsl
-        private val DEFAULT_TIMEZONE = TimeAndDate.getDefaultTimeZone()
-
-        @CreatorsDsl
-        private val JSON_DATE_FORMAT = TimeAndDate.getDefaultDateFormat()
-
-        @CreatorsDsl
         private val TO_INDENT_PRINTS = DefaultIndenter().withIndent("    ")
 
         @CreatorsDsl
         private val TO_PRETTY_PRINTS = DefaultPrettyPrinter().withArrayIndenter(TO_INDENT_PRINTS).withObjectIndenter(TO_INDENT_PRINTS)
     }
+
+
 }

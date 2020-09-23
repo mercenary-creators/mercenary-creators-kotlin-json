@@ -19,7 +19,7 @@ package co.mercenary.creators.kotlin.json
 import co.mercenary.creators.kotlin.util.*
 
 @IgnoreForSerialize
-enum class JSONTypeOf {
+enum class JSONTypeOf : SafeForLogging {
 
     @CreatorsDsl
     OBJECT,

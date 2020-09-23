@@ -25,6 +25,7 @@ import java.math.*
 import java.net.*
 import java.nio.channels.ReadableByteChannel
 import java.nio.file.Path
+import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.atomic.*
 import kotlin.reflect.KClass
@@ -214,6 +215,7 @@ object JSONStatic {
     fun asDate(look: Any?): Date? = when (look) {
         null -> null
         is Date -> look
+        is LocalDateTime -> look.convertTo()
         else -> null
     }
 

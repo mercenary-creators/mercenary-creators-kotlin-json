@@ -14,19 +14,8 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.module
+package co.mercenary.creators.kotlin.json.util.typicode
 
-import co.mercenary.creators.kotlin.util.*
-import com.fasterxml.jackson.core.*
-import com.fasterxml.jackson.core.util.VersionUtil
+import co.mercenary.creators.kotlin.json.JSONAware
 
-@CreatorsDsl
-@IgnoreForSerialize
-object MercenaryPackageVersion : Versioned {
-
-    private val version = VersionUtil.parseVersion("9.9.1-SNAPSHOT", "co.mercenary-creators", "mercenary-creators-kotlin-json")
-
-    @CreatorsDsl
-    @IgnoreForSerialize
-    override fun version(): Version = version
-}
+interface AbstractTypicodeAware : JSONAware

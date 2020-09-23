@@ -18,8 +18,7 @@ package co.mercenary.creators.kotlin.json.util.typicode
 
 import co.mercenary.creators.kotlin.util.*
 
-data class TypicodeAlbumData(val userId: Int, val id: Int, val title: String) : Typicode {
-
+data class TypicodeAlbumData(val userId: Int, val id: Int, val title: String) : AbstractTypicodeAware {
     override fun toString() = toJSONString()
 
     companion object {
