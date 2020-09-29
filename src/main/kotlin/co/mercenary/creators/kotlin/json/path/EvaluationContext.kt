@@ -74,22 +74,22 @@ interface EvaluationContext {
     fun rename(path: CompiledPath, last: String, name: String): EvaluationContext
 
     @CreatorsDsl
-    fun add(path: String, data: Any): EvaluationContext
+    fun add(path: String, data: Any?): EvaluationContext
 
     @CreatorsDsl
-    fun add(path: CompiledPath, data: Any): EvaluationContext
+    fun add(path: CompiledPath, data: Any?): EvaluationContext
 
     @CreatorsDsl
-    fun set(path: String, data: Any): EvaluationContext
+    fun set(path: String, data: Any?): EvaluationContext
 
     @CreatorsDsl
-    fun set(path: CompiledPath, data: Any): EvaluationContext
+    fun set(path: CompiledPath, data: Any?): EvaluationContext
 
     @CreatorsDsl
-    fun put(path: String, name: String, data: Any): EvaluationContext
+    fun put(path: String, name: String, data: Any?): EvaluationContext
 
     @CreatorsDsl
-    fun put(path: CompiledPath, name: String, data: Any): EvaluationContext
+    fun put(path: CompiledPath, name: String, data: Any?): EvaluationContext
 
     @CreatorsDsl
     fun map(path: String, func: (Any, EvaluationContext) -> Any): EvaluationContext

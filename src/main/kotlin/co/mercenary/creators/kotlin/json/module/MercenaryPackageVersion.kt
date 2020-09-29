@@ -24,7 +24,7 @@ import com.fasterxml.jackson.core.util.VersionUtil
 @IgnoreForSerialize
 object MercenaryPackageVersion : Versioned {
 
-    private val version = VersionUtil.parseVersion("9.9.1-SNAPSHOT", "co.mercenary-creators", "mercenary-creators-kotlin-json")
+    private val version = VersionUtil.parseVersion("9.9.2-SNAPSHOT", "co.mercenary-creators", "mercenary-creators-kotlin-json")
 
     @CreatorsDsl
     @IgnoreForSerialize

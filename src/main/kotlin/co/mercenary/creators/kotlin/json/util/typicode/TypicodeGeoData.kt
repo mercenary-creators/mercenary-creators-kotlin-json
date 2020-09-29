@@ -16,6 +16,17 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-data class TypicodeGeoData(val lat: String, val lng: String) : AbstractTypicodeAware {
+import co.mercenary.creators.kotlin.json.*
+import co.mercenary.creators.kotlin.util.*
+
+data class TypicodeGeoData(val lat: String, val lng: String) : JSONAware, Copyable<TypicodeGeoData>, Cloneable {
+
+    @CreatorsDsl
+    override fun clone() = copyOf()
+
+    @CreatorsDsl
+    override fun copyOf() = deepOf()
+
+    @CreatorsDsl
     override fun toString() = toJSONString()
 }

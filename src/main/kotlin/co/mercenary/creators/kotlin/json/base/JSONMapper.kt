@@ -17,6 +17,7 @@
 package co.mercenary.creators.kotlin.json.base
 
 import co.mercenary.creators.kotlin.json.JSONVersioned
+import co.mercenary.creators.kotlin.json.module.MercenaryPackageVersion
 import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
 import co.mercenary.creators.kotlin.util.time.TimeAndDate
@@ -82,6 +83,9 @@ open class JSONMapper : ObjectMapper, StandardInterfaces<JSONMapper>, JSONVersio
 
     @CreatorsDsl
     override fun copyOf() = JSONMapper(this)
+
+    @CreatorsDsl
+    override fun version() = MercenaryPackageVersion.version()
 
     @CreatorsDsl
     @IgnoreForSerialize
@@ -261,6 +265,4 @@ open class JSONMapper : ObjectMapper, StandardInterfaces<JSONMapper>, JSONVersio
         @CreatorsDsl
         private val TO_PRETTY_PRINTS = DefaultPrettyPrinter().withArrayIndenter(TO_INDENT_PRINTS).withObjectIndenter(TO_INDENT_PRINTS)
     }
-
-
 }

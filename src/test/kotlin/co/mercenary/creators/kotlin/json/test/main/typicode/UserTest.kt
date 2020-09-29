@@ -26,7 +26,10 @@ class UserTest : KotlinTest() {
             info { list }
             info { list.size }
             list.size shouldBe TypicodeUserData.size()
+            error { dash() }
+            error { here() }
         }
+        warn { dash() }
         warn { here() }
     }
 }

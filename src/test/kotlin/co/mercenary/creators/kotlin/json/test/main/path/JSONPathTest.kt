@@ -23,6 +23,11 @@ class JSONPathTest : KotlinTest() {
     @Test
     fun test() {
         val path = JSONPath.path(loader["data.json"])
+        warn { path }
+        warn { JSONPath.compile("$") }
+        warn { JSONPath.compile("$.null-property") }
+        warn { JSONPath.compile("$.store.book[*]") }
+        warn { JSONPath.compile("$.store.book[0]") }
         val data = path.eval<JSONObject>("$")
         info { data }
         data.size shouldBe 10
@@ -44,6 +49,6 @@ class JSONPathTest : KotlinTest() {
         info { list }
         list.size shouldBe 4
         list[3].author shouldBe "J. R. R. Tolkien"
-        info { path.deep().delete("$.null-property").delete("$.foo").delete("$.@id").set("$.int-max-property", 1111).add("$.store.book", BookData("reference", "Dean S. Jones", "Kotlin 1.3", "0-395-19395-8", 52.99)).put("$", "dean", 55).eval<JSONObject>("$") }
+        info { path.deep().delete("$.null-property").delete("$.foo").delete("$.@id").set("$.int-max-property", 1111).add("$.store.book", BookData("reference", "Dean S. Jones", "Kotlin 1.4", "0-395-19395-8", 52.99)).put("$", "dean", 57).eval<JSONObject>("$") }
     }
 }

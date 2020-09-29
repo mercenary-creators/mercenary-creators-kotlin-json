@@ -16,7 +16,16 @@
 
 package co.mercenary.creators.kotlin.json.path
 
-interface CompiledPath {
-    fun toPathSpec(): String
+import co.mercenary.creators.kotlin.util.*
+
+@IgnoreForSerialize
+interface CompiledPath : HasMapNames {
+
+    @CreatorsDsl
+    @IgnoreForSerialize
     fun isDefinite(): Boolean
+
+    @CreatorsDsl
+    @IgnoreForSerialize
+    fun getPathSpec(): String
 }

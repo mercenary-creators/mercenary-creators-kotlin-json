@@ -22,5 +22,5 @@ interface JSONPathAware {
 
     @CreatorsDsl
     @IgnoreForSerialize
-    fun getEvaluationContext(): EvaluationContext = JSONPath.path(this)
+    fun evaluate(): EvaluationContext = JSONPath.path(this)
 }

@@ -16,6 +16,17 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-data class TypicodeAddressData(val street: String, val suite: String, val city: String, val zipcode: String, val geo: TypicodeGeoData) : AbstractTypicodeAware {
+import co.mercenary.creators.kotlin.json.*
+import co.mercenary.creators.kotlin.util.*
+
+data class TypicodeAddressData(val street: String, val suite: String, val city: String, val zipcode: String, val geo: TypicodeGeoData) : JSONAware, Copyable<TypicodeAddressData>, Cloneable {
+
+    @CreatorsDsl
+    override fun clone() = copyOf()
+
+    @CreatorsDsl
+    override fun copyOf() = deepOf()
+
+    @CreatorsDsl
     override fun toString() = toJSONString()
 }

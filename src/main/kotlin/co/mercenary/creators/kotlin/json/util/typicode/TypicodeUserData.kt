@@ -16,22 +16,29 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
+import co.mercenary.creators.kotlin.json.*
 import co.mercenary.creators.kotlin.util.*
 
-data class TypicodeUserData(val id: Int, val name: String, val username: String, val email: String, val address: TypicodeAddressData, val phone: String, val website: String, val company: TypicodeCompanyData) : AbstractTypicodeAware {
+data class TypicodeUserData(val id: Int, val name: String, val username: String, val email: String, val address: TypicodeAddressData, val phone: String, val website: String, val company: TypicodeCompanyData) : JSONAware, Copyable<TypicodeUserData>, Cloneable {
 
+    @CreatorsDsl
+    override fun clone() = copyOf()
+
+    @CreatorsDsl
+    override fun copyOf() = deepOf()
+
+    @CreatorsDsl
     override fun toString() = toJSONString()
 
     companion object {
 
         @JvmStatic
         @CreatorsDsl
-        @IgnoreForSerialize
         fun size() = 10
 
         @JvmStatic
         @CreatorsDsl
-        @IgnoreForSerialize
-        fun path() = "http://jsonplaceholder.typicode.com/users"
+        @JvmOverloads
+        fun path(secure: Boolean = false) = "/users".typicodePathOf(secure)
     }
 }

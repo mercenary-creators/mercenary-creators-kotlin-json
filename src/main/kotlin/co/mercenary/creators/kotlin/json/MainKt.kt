@@ -110,3 +110,12 @@ inline fun <reified T : Any> Reader.readOf(done: Boolean = true): T = JSONStatic
 @CreatorsDsl
 inline fun <reified T : Any> InputStream.readOf(done: Boolean = true): T = JSONStatic.jsonReadOf(this, typeReferenceOf(), done)
 
+@CreatorsDsl
+fun String.typicodePathOf(secure: Boolean): String = when (!secure) {
+    true -> "http://jsonplaceholder.typicode.com/${removePrefix("/")}"
+    else -> "https://jsonplaceholder.typicode.com/${removePrefix("/")}"
+}
+
+@CreatorsDsl
+infix fun <B> String.pair(that: B): Pair<String, B> = Pair(this, that)
+

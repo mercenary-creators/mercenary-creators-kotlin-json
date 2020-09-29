@@ -16,21 +16,29 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
+import co.mercenary.creators.kotlin.json.*
 import co.mercenary.creators.kotlin.util.*
 
-data class TypicodeCommentData(val postId: Int, val id: Int, val name: String, val email: String, val body: String) : AbstractTypicodeAware {
+data class TypicodeCommentData(val postId: Int, val id: Int, val name: String, val email: String, val body: String) : JSONAware, Copyable<TypicodeCommentData>, Cloneable {
+
+    @CreatorsDsl
+    override fun clone() = copyOf()
+
+    @CreatorsDsl
+    override fun copyOf() = deepOf()
+
+    @CreatorsDsl
     override fun toString() = toJSONString()
 
     companion object {
 
         @JvmStatic
         @CreatorsDsl
-        @IgnoreForSerialize
         fun size() = 500
 
         @JvmStatic
         @CreatorsDsl
-        @IgnoreForSerialize
-        fun path() = "http://jsonplaceholder.typicode.com/comments"
+        @JvmOverloads
+        fun path(secure: Boolean = false) = "/comments".typicodePathOf(secure)
     }
 }

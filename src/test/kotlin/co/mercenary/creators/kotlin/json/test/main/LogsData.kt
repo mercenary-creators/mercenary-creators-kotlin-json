@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package co.mercenary.creators.kotlin.json.util.typicode
+package co.mercenary.creators.kotlin.json.test.main
 
 import co.mercenary.creators.kotlin.json.*
 import co.mercenary.creators.kotlin.util.*
+import com.fasterxml.jackson.annotation.*
 
-data class TypicodeAlbumData(val userId: Int, val id: Int, val title: String) : JSONAware, Copyable<TypicodeAlbumData>, Cloneable {
+class LogsData @CreatorsDsl constructor(private val data: LoggingLevel) : JSONAware, Copyable<LogsData>, Cloneable {
+
+    @JsonCreator
+    @CreatorsDsl
+    private constructor(@JsonProperty("level") from: String) : this(LoggingLevel.from(from))
+
+    @get:JsonProperty("level")
+    private val level: String
+        get() = data.toString()
 
     @CreatorsDsl
     override fun clone() = copyOf()
@@ -30,15 +39,12 @@ data class TypicodeAlbumData(val userId: Int, val id: Int, val title: String) : 
     @CreatorsDsl
     override fun toString() = toJSONString()
 
-    companion object {
+    @CreatorsDsl
+    override fun hashCode() = data.hashCode()
 
-        @JvmStatic
-        @CreatorsDsl
-        fun size() = 100
-
-        @JvmStatic
-        @CreatorsDsl
-        @JvmOverloads
-        fun path(secure: Boolean = false) = "/albums".typicodePathOf(secure)
+    @CreatorsDsl
+    override fun equals(other: Any?) = when (other) {
+        is LogsData -> this === other || data == other.data
+        else -> false
     }
 }

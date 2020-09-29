@@ -16,6 +16,17 @@
 
 package co.mercenary.creators.kotlin.json.util.typicode
 
-data class TypicodeCompanyData(val name: String, val catchPhrase: String, val bs: String) : AbstractTypicodeAware {
+import co.mercenary.creators.kotlin.json.*
+import co.mercenary.creators.kotlin.util.*
+
+data class TypicodeCompanyData(val name: String, val catchPhrase: String, val bs: String) : JSONAware, Copyable<TypicodeCompanyData>, Cloneable {
+
+    @CreatorsDsl
+    override fun clone() = copyOf()
+
+    @CreatorsDsl
+    override fun copyOf() = deepOf()
+
+    @CreatorsDsl
     override fun toString() = toJSONString()
 }

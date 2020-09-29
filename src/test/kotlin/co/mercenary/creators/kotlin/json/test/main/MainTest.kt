@@ -21,9 +21,10 @@ import co.mercenary.creators.kotlin.util.*
 import org.junit.jupiter.api.Test
 
 class MainTest : KotlinTest() {
+
     @Test
     fun test() {
-        val data = json("name" to author, "time" to 53.years + 4.weeks, "list" to sequenceOf(2, 4).toList(), "horz" to "Maël Hörz\n")
+        val data = json("name" pair author, "time" pair 57.years - 2.weeks, "list" pair sequenceOf(2, 4).toList(), "horz" pair "Maël Hörz\n")
         info { data.copyOf() }
         data.size shouldBe 4
         data["date"] = dateOf()
@@ -32,8 +33,16 @@ class MainTest : KotlinTest() {
         warn { data isDefined "date" }
         warn { data isDate "date" }
         warn { data isLong "date" }
-        warn { data isDefined "main" }
-        val main = MainData(53.years + 4.weeks, sequenceOf(2, 4))
+        warn { data isDefined "json" }
+        data.evaluate().delete("$.date").put("$", "json", json("self" pair "Dean S. Jones"))
+        error { data }
+        error { data isDefined "date" }
+        error { data isDefined "json" }
+        data.evaluate().put("$.json", "case", json("good" pair true, "size" pair DEFAULT_BUFFER_SIZE))
+        data.evaluate().add("$.list", 6)
+        dashes()
+        error { data }
+        val main = MainData(57.years - 2.weeks, sequenceOf(2, 4))
         val buff = main.toString()
         info { buff }
         val back = buff.readOf<MainData>()
@@ -41,5 +50,19 @@ class MainTest : KotlinTest() {
         warn { this }
         error { here() }
         info { this }
+        val maps = json("level" pair loggerOf().getLevel())
+        dashes()
+        warn { maps }
+        warn { maps.nameOf() }
+        val args = maps.toDataType<LogsData>()
+        warn { args }
+        warn { args.nameOf() }
+        dashes()
+        val keys = LogsData(loggerOf().getLevel())
+        error { keys }
+        val text = keys.toString()
+        info { text }
+        val make = text.readOf<LogsData>()
+        error { make }
     }
 }

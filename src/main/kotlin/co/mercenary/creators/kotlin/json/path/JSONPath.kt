@@ -16,6 +16,7 @@
 
 package co.mercenary.creators.kotlin.json.path
 
+import co.mercenary.creators.kotlin.json.JSONStatic
 import co.mercenary.creators.kotlin.json.base.*
 import co.mercenary.creators.kotlin.util.*
 import co.mercenary.creators.kotlin.util.io.InputStreamSupplier
@@ -29,6 +30,7 @@ import java.nio.channels.ReadableByteChannel
 import java.nio.file.Path
 import kotlin.reflect.KClass
 
+@IgnoreForSerialize
 object JSONPath {
 
     private val CACHED = atomicMapOf<String, JSONCompiledPath>()
@@ -47,7 +49,7 @@ object JSONPath {
 
     @JvmStatic
     @CreatorsDsl
-    private fun lookup(path: CompiledPath) = lookup(path.toPathSpec())
+    private fun lookup(path: CompiledPath) = lookup(path.getPathSpec())
 
     @JvmStatic
     @CreatorsDsl
@@ -57,6 +59,7 @@ object JSONPath {
     @CreatorsDsl
     private fun make(data: Any): EvaluationContext {
         return when (data) {
+            is DocumentContext -> JSONEvaluationContext(data)
             is URI -> JSONEvaluationContext(data.toInputStream())
             is URL -> JSONEvaluationContext(data.toInputStream())
             is File -> JSONEvaluationContext(data.toInputStream())
@@ -67,7 +70,6 @@ object JSONPath {
             is ReadableByteChannel -> JSONEvaluationContext(data.toInputStream())
             is InputStream -> JSONEvaluationContext(data)
             is CharSequence -> JSONEvaluationContext(data)
-            is DocumentContext -> JSONEvaluationContext(data)
             else -> JSONEvaluationContext(data)
         }
     }
@@ -80,22 +82,38 @@ object JSONPath {
     @CreatorsDsl
     fun compile(path: String): CompiledPath = cached(path)
 
-    internal class JSONJacksonMappingProvider(mapper: JSONMapper) : JacksonMappingProvider(mapper)
+    @IgnoreForSerialize
+    internal class JSONJacksonMappingProvider @CreatorsDsl constructor(mapper: JSONMapper) : JacksonMappingProvider(mapper)
 
-    internal class JSONJacksonProvider(mapper: JSONMapper) : JacksonJsonProvider(mapper) {
+    @IgnoreForSerialize
+    internal class JSONJacksonProvider @CreatorsDsl constructor(mapper: JSONMapper) : JacksonJsonProvider(mapper) {
+
         override fun createMap() = JSONObject()
         override fun createArray() = JSONArray()
     }
 
+    @IgnoreForSerialize
     internal class JSONCompiledPath(internal val compiled: JsonPath) : CompiledPath {
 
+        @CreatorsDsl
         constructor(path: String) : this(JsonPath.compile(path))
 
-        override fun toString(): String = toPathSpec()
-        override fun toPathSpec(): String = compiled.path
+        @CreatorsDsl
+        override fun toString(): String = getPathSpec()
+
+        @CreatorsDsl
+        @IgnoreForSerialize
         override fun isDefinite(): Boolean = compiled.isDefinite
+
+        @CreatorsDsl
+        @IgnoreForSerialize
+        override fun getPathSpec(): String = compiled.path
+
+        @CreatorsDsl
+        override fun toMapNames() = dictOf("path" to getPathSpec(), "definite" to isDefinite())
     }
 
+    @IgnoreForSerialize
     internal class JSONEvaluationContext @CreatorsDsl constructor(internal val context: DocumentContext) : EvaluationContext {
 
         @CreatorsDsl
@@ -107,32 +125,86 @@ object JSONPath {
         @CreatorsDsl
         constructor(data: CharSequence) : this(JsonPath.parse(data.toString(), CONFIG))
 
+        @CreatorsDsl
         override fun deep() = make(json() as Any)
-        override fun add(path: String, data: Any) = make(context.add(lookup(path), data))
-        override fun add(path: CompiledPath, data: Any) = make(context.add(lookup(path), data))
-        override fun set(path: String, data: Any) = make(context.set(lookup(path), data))
-        override fun set(path: CompiledPath, data: Any) = make(context.set(lookup(path), data))
-        override fun put(path: String, name: String, data: Any) = make(context.put(lookup(path), name, data))
-        override fun put(path: CompiledPath, name: String, data: Any) = make(context.put(lookup(path), name, data))
+
+        @CreatorsDsl
+        override fun add(path: String, data: Any?) = make(context.add(lookup(path), data))
+
+        @CreatorsDsl
+        override fun add(path: CompiledPath, data: Any?) = make(context.add(lookup(path), data))
+
+        @CreatorsDsl
+        override fun set(path: String, data: Any?) = make(context.set(lookup(path), data))
+
+        @CreatorsDsl
+        override fun set(path: CompiledPath, data: Any?) = make(context.set(lookup(path), data))
+
+        @CreatorsDsl
+        override fun put(path: String, name: String, data: Any?) = make(context.put(lookup(path), name, data))
+
+        @CreatorsDsl
+        override fun put(path: CompiledPath, name: String, data: Any?) = make(context.put(lookup(path), name, data))
+
+        @CreatorsDsl
         override fun delete(path: String) = make(context.delete(lookup(path)))
+
+        @CreatorsDsl
         override fun delete(path: CompiledPath) = make(context.delete(lookup(path)))
+
+        @CreatorsDsl
         override fun rename(path: String, last: String, name: String) = make(context.renameKey(lookup(path), last, name))
+
+        @CreatorsDsl
         override fun rename(path: CompiledPath, last: String, name: String) = make(context.renameKey(lookup(path), last, name))
+
+        @CreatorsDsl
         override fun <T : Any> eval(path: String, type: Class<T>): T = context.read(lookup(path), type)
+
+        @CreatorsDsl
         override fun <T : Any> eval(path: String, type: TypeRef<T>): T = context.read(lookup(path), type)
+
+        @CreatorsDsl
         override fun <T : Any> eval(path: String, type: KClass<T>): T = context.read(lookup(path), type.java)
+
+        @CreatorsDsl
         override fun <T : Any> read(path: String, type: Class<T>): T? = context.read(lookup(path), type)
+
+        @CreatorsDsl
         override fun <T : Any> read(path: String, type: TypeRef<T>): T? = context.read(lookup(path), type)
+
+        @CreatorsDsl
         override fun <T : Any> read(path: String, type: KClass<T>): T? = context.read(lookup(path), type.java)
+
+        @CreatorsDsl
         override fun <T : Any> eval(path: CompiledPath, type: Class<T>): T = context.read(lookup(path), type)
+
+        @CreatorsDsl
         override fun <T : Any> eval(path: CompiledPath, type: TypeRef<T>): T = context.read(lookup(path), type)
+
+        @CreatorsDsl
         override fun <T : Any> eval(path: CompiledPath, type: KClass<T>): T = context.read(lookup(path), type.java)
+
+        @CreatorsDsl
         override fun <T : Any> read(path: CompiledPath, type: Class<T>): T? = context.read(lookup(path), type)
+
+        @CreatorsDsl
         override fun <T : Any> read(path: CompiledPath, type: TypeRef<T>): T? = context.read(lookup(path), type)
+
+        @CreatorsDsl
         override fun <T : Any> read(path: CompiledPath, type: KClass<T>): T? = context.read(lookup(path), type.java)
+
+        @CreatorsDsl
         override fun map(path: String, func: (Any, EvaluationContext) -> Any) = make(context.map(lookup(path), mapper(func, this)))
+
+        @CreatorsDsl
         override fun map(path: CompiledPath, func: (Any, EvaluationContext) -> Any) = make(context.map(lookup(path), mapper(func, this)))
+
+        @CreatorsDsl
         override fun <T : Any> json(): T = context.json()
+
+        @CreatorsDsl
+        override fun toString(): String = JSONStatic.toJSONString(context.json(), true)
 
         companion object {
 

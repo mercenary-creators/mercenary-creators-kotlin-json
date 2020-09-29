@@ -28,7 +28,7 @@ class JSONObject : LinkedHashMap<String, Any?>, JSONBase<String, JSONObject> {
     constructor(args: Map<String, Any?>) : super(args.toMap())
 
     @CreatorsDsl
-    constructor(k: String, v: Any?) : super(dictOf(k to v).toMap())
+    constructor(k: String, v: Any?) : super(dictOf(k pair v).toMap())
 
     @CreatorsDsl
     constructor(vararg args: Pair<String, Any?>) : super(args.toMap())
